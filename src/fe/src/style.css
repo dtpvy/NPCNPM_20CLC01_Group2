@@ -1,0 +1,13 @@
+body {
+  background-color: #d4cdf4;
+}
+.catagory--product {
+  width: 12%;
+}
+.suggestion--product {
+  width: 16%;
+}
+
+.search-input {
+  width: 600px;
+}
