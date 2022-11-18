@@ -1,11 +1,13 @@
 import React from "react";
+import { Routes, Route } from "react-router-dom";
 
 const App = () => {
 	return (
-		<div>
-			<strong>Hello World</strong>
-			<p>This is a Vite project</p>
-		</div>
+		<Routes>
+			<Route path="/" element={<Layout />}>
+				
+			</Route>
+		</Routes>
 	);
 };
 
