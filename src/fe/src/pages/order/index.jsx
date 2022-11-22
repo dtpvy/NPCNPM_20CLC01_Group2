@@ -1,11 +1,7 @@
-import React from 'react';
+import React from "react";
 
 const Order = () => {
-    return (
-        <div>
-            Order page
-        </div>
-    );
+  return <div>Order page</div>;
 };
 
 Order.propTypes = {};
