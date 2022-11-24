@@ -1,5 +1,5 @@
 import React from "react";
-import SuggestionBox from "./SuggestionBox.jsx";
+import ProductBox from "./ProductBox.jsx";
 export default function Suggestion(props) {
   let suggestions = [
     { name: "Quần áo 1", price: "200.0" },
@@ -16,7 +16,14 @@ export default function Suggestion(props) {
     { name: "áo 1", price: "200.0" },
   ];
   let Suggestions = suggestions.map((thing) => {
-    return <SuggestionBox product={thing.name} price={thing.price} />;
+    return (
+      <ProductBox
+        widthSmall="w-3/12"
+        widthLarge="w-2/12"
+        product={thing.name}
+        price={thing.price}
+      />
+    );
   });
   return (
     <div className="category-container mx-3 mx-1 my-5 bg-white ">

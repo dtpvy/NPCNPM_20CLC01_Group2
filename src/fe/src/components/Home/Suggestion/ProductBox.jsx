@@ -1,11 +1,11 @@
 import React from "react";
 import img from "./hat.jpg";
 
-export default function SuggestionBox(props) {
+export default function ProductBox(props) {
   return (
     <a
       href="#"
-      className="suggestion--product text-center text-black  no-underline pt-2 w-3/12 lg:w-2/12"
+      className={`suggestion--product text-center text-black  no-underline pt-2 ${props.widthSmall} lg:${props.widthLarge} `}
     >
       <div className="relative bg-white ml-1.5 inline-block">
         <img className="inline-block" src={img} alt="" />
