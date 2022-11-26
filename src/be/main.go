@@ -1,19 +1,29 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 
-	"github.com/labstack/echo/v4"
+	"github.com/julienschmidt/httprouter"
+	_ "github.com/lib/pq"
+)
+
+const (
+	host     = "localhost"
+	port     = 5432
+	user     = "postgres"
+	password = "123"
+	dbname   = "webanhang"
 )
 
 func main() {
-	server := echo.New()
+	router := httprouter.New()
 
-	server.GET("/", hello)
+	router.GET("/login", routers.Login)
 
-	server.Logger.Fatal(server.Start(":8080"))
-}
+	router.GET("/hello/:name", func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		fmt.Fprintf(w, "hello, %s!\n", ps.ByName("name"))
+	})
 
-func hello(c echo.Context) error {
-	return c.String(http.StatusOK, "hello world!")
+	http.ListenAndServe(":8080", router)
 }
