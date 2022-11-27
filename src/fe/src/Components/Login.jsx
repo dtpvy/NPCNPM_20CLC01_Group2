@@ -24,8 +24,8 @@ export default function Login() {
                     <p className='flex items-center'><input className='mr-2' type="checkbox" /> Lưu mật khẩu </p>
                     <p>Quên mật khẩu? </p>
                 </div>
-                <div className='flex justify-between text-gray-400 py-2'>
-                    <p>Chưa có tài khoản?</p>
+                <div className=' flex justify-between  text-gray-400 py-2'>
+                    <a  class = "italic" href="/Register.jsx/" >Chưa có tài khoản? </a>
                 </div>
                 <button className='w-full my-5 py-2 bg-teal-500 shadow-lg shadow-teal-500/50 hover:shadow-teal-500/40 text-white font-semibold rounded-lg'>Đăng nhập</button>
                 
