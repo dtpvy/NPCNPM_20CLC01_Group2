@@ -1,12 +1,10 @@
 import React from "react";
+import Login from "./components/Login";
 
 const App = () => {
-	return (
-		<div>
-			<strong>Hello World</strong>
-			<p>This is a Vite project</p>
-		</div>
-	);
+  return (
+    <Login/>
+  );
 };
 
 export default App;
