@@ -10,6 +10,7 @@ const App = () => {
       <Route path="/" element={<Layout />}></Route>
       <Route path="/order" element={<Order />}></Route>
     </Routes>
+    
   );
 };
 
