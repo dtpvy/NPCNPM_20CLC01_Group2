@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"main/routes"
 	"net/http"
 
 	"github.com/julienschmidt/httprouter"
@@ -19,11 +19,8 @@ const (
 func main() {
 	router := httprouter.New()
 
-	router.GET("/login", routers.Login)
-
-	router.GET("/hello/:name", func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-		fmt.Fprintf(w, "hello, %s!\n", ps.ByName("name"))
-	})
+	router.POST("/auth/login", routes.Login)
+	router.POST("/auth/register", routes.Register)
 
 	http.ListenAndServe(":8080", router)
 }

@@ -12,23 +12,22 @@ const (
 	port     = 5432
 	user     = "postgres"
 	password = "123"
-	dbname   = "webanhang"
+	dbname   = "database"
 )
 
-func connect() *sql.DB {
+func CheckErr(err error) {
+	if err != nil {
+		panic(err)
+	}
+}
+
+func Connect() *sql.DB {
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
 		"password=%s dbname=%s sslmode=disable",
 		host, port, user, password, dbname)
 
 	db, err := sql.Open("postgres", psqlInfo)
-	if err != nil {
-		panic(err)
-	}
-	defer db.Close()
+	CheckErr(err)
 
-	err = db.Ping()
-	if err != nil {
-		panic(err)
-	}
 	return db
 }
