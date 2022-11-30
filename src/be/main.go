@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"main/routes"
 	"net/http"
 
@@ -25,5 +26,6 @@ func main() {
 	router.GET("/home/product", routes.GetProductSuggestion)
 	router.GET("/home/product/", routes.Register)
 
-	http.ListenAndServe(":10000", router)
+	fmt.Print("Server start with port 8080")
+	http.ListenAndServe(":8080", router)
 }
