@@ -21,6 +21,9 @@ func main() {
 
 	router.POST("/auth/login", routes.Login)
 	router.POST("/auth/register", routes.Register)
+	router.GET("/home/category", routes.GetCategories)
+	router.GET("/home/product", routes.GetProductSuggestion)
+	router.GET("/home/product/", routes.Register)
 
-	http.ListenAndServe(":8080", router)
+	http.ListenAndServe(":10000", router)
 }
