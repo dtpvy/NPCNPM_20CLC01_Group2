@@ -13,9 +13,9 @@ export default function SellerInfor() {
     join: "12 tháng trước",
   };
   return (
-    <div className="flex my-1 pb-2 bg-white">
-      <div className="w-4/12 bg-indigo-800 p-3 m-3 text-white flex flex-col justify-around items-center">
-        <div className="">
+    <div className="flex mb-3 pt-2 pb-4 bg-white ">
+      <div className="w-4/12 bg-indigo-800 p-3 m-3 text-white flex flex-col justify-around items-center rounded">
+        <div className="mr-5 ml-3">
           <div className="inline-block border rounded-full h-10 w-10 mr-2 bg-black"></div>
           <div className="inline-block">
             <p className="">{data.name}</p>
@@ -30,7 +30,8 @@ export default function SellerInfor() {
           <div className="border border-white inline-block w-1/2">Chat</div>
         </div>
       </div>
-      <div className="w-3/12 m-3">
+
+      <div className="w-3/12 ml-8 mt-4">
         <p className="pb-2">
           <i className="mr-2 fa fa-shopping-basket"></i>
           Sản phẩm: <span className="text-orange-700		">{data.products}</span>
@@ -46,7 +47,7 @@ export default function SellerInfor() {
           <span className="text-orange-700"> {data.replyPercent}</span>
         </p>
       </div>
-      <div className="w-3/12 m-3">
+      <div className="w-3/12 mx-2 mt-4">
         <p className="pb-2">
           <i className="mr-2 fa fa-window-close-o"></i>
           Tỉ lệ shop hủy đơn:{" "}
@@ -65,7 +66,7 @@ export default function SellerInfor() {
           </span>
         </p>
       </div>
-      <div className="w-2/12 m-3">
+      <div className="w-2/12 mx-2 mt-4">
         <p className="pb-2">
           <i className="mr-2 fa fa-check-circle-o"></i>
           Tham gia: <span className="text-orange-700">{data.join} </span>

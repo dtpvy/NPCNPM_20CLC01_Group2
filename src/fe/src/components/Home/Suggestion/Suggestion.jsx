@@ -18,7 +18,7 @@ export default function Suggestion(props) {
   let Suggestions = suggestions.map((thing) => {
     return (
       <ProductBox
-        widthSmall="w-3/12"
+        widthSmall="w-2/12"
         widthLarge="w-2/12"
         product={thing.name}
         price={thing.price}
@@ -26,7 +26,7 @@ export default function Suggestion(props) {
     );
   });
   return (
-    <div className="category-container mx-3 mx-1 my-5 bg-white ">
+    <div className="category-container mx-2 mx-1 my-5 bg-white ">
       <h3 className="text-3xl font-semibold ml-5 mb-3">Gợi ý hôm nay</h3>
       <div className="flex flex-wrap bg-zinc-200 pb-1.5 pr-1.5">
         {Suggestions}
