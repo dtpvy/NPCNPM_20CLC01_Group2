@@ -19,8 +19,11 @@ export default function Register() {
                 <div className='flex flex-col text-gray-400 py-2'>
                     <label>Mật khẩu</label>
                     <input className='p-2 rounded-lg bg-gray-700 mt-2 focus:border-blue-500 focus:bg-gray-800 focus:outline-none' type="password" />
+                </div>
+                <div className='flex flex-col text-gray-400 py-2'>
                     <label>Xác nhận mật khẩu</label>
                     <input className='p-2 rounded-lg bg-gray-700 mt-2 focus:border-blue-500 focus:bg-gray-800 focus:outline-none' type="password" />
+
                 </div>
                 <button className='w-full my-5 py-2 bg-teal-500 shadow-lg shadow-teal-500/50 hover:shadow-teal-500/40 text-white font-semibold rounded-lg'>Đăng Ký</button>
                 
