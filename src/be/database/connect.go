@@ -2,10 +2,8 @@ package db
 
 import (
 	"fmt"
-	"log"
 	"os"
 
-	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -25,16 +23,10 @@ func CheckErr(err error) {
 }
 
 func Connect() *gorm.DB {
-	err := godotenv.Load("process.env")
-	if err != nil {
-		log.Fatalf("Some error occured. Err: %s", err)
-	}
-	env, ok := os.LookupEnv("ENV")
-	if !ok {
-		log.Fatalln("Missing MySQL connection string")
-	}
+	env := os.Getenv("ENV")
 	dev := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
 	prod := os.Getenv("DATABASE_PROD")
+	fmt.Println(env, prod)
 	if env == "prod" {
 		db, err := gorm.Open(postgres.Open(prod), &gorm.Config{})
 		CheckErr(err)
