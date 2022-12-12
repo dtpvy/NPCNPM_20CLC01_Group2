@@ -9,8 +9,8 @@ body {
 }
 
 @layer components {
-	.Title-Grid {
-		display: grid;
-		grid-template-columns: 398px 190px 130px 130px 30px;
-	} 
+  .Title-Grid {
+    display: grid;
+    grid-template-columns: 398px 190px 130px 130px 30px;
+  }
 }
