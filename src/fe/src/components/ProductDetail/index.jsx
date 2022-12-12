@@ -17,14 +17,14 @@ const ProductDetail = () => {
 			<div className="bg-white w-3/5 p-5 shadow-md rounded-md grid grid-cols-2 divide-x-2">
 				<div className="flex flex-col justify-between h-full w-full pr-5">
 					<div className="flex flex-col gap-y-5">
-						<h2 className="mx-2 text-3xl font-bold">Tên sản phẩm nè</h2>
+						<h2 className="mx-2 text-3xl font-bold">Quần Jean Khá Bảnh</h2>
 						<div className="text-white-400 mx-2">Đã bán: 51</div>
 						<div className="bg-slate-100 rounded-md mx-2 px-4 py-2 w-fit">
-							<span className="text-red-500 text-3xl font-bold">105.400đ</span>
+							<span className="text-red-500 text-3xl font-bold">10.000.000đ</span>
 						</div>
 						<div className="mx-2">
 							<div className="mb-3">Giao đến:</div>
-							<div>Q.1, Bến nghé, Tp.HCM</div>
+							<div>Q.7, Phú Thuận, Tp.HCM</div>
 						</div>
 						<div className="mx-2">
 							<div className="mb-3">Số lượng</div>
@@ -60,7 +60,7 @@ const ProductDetail = () => {
 							<div className="aspect-square h-16">
 								<img src={logo} alt="cannot load" className="w-full h-full object-fill" />
 							</div>
-							<h2 className="mx-2 text-3xl font-bold">Tên shop nè</h2>
+							<h2 className="mx-2 text-3xl font-bold">Unilever</h2>
 						</div>
 						<div className="py-3">
 							<div className="h-8 flex gap-x-3 mb-3">
