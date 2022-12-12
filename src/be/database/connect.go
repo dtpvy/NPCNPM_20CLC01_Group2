@@ -27,13 +27,13 @@ func Connect() *gorm.DB {
 	dev := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
 	prod := os.Getenv("DATABASE_PROD")
 	fmt.Println(env, prod)
-	if env == "prod" {
-		db, err := gorm.Open(postgres.Open(prod), &gorm.Config{})
+	if env == "dev" {
+		db, err := gorm.Open(postgres.Open(dev), &gorm.Config{})
 		CheckErr(err)
 
 		return db
 	} else {
-		db, err := gorm.Open(postgres.Open(dev), &gorm.Config{})
+		db, err := gorm.Open(postgres.Open(prod), &gorm.Config{})
 		CheckErr(err)
 
 		return db
