@@ -69,7 +69,7 @@ const Support = () => {
 				</div>
 				<div>
 					<button
-						className="w-28 p-2 rounded-md bg-orange-500 text-white text-semibold"
+						className="w-32 px-3 p-2 rounded-md bg-orange-500 text-white text-semibold"
 						type="submit">
 						Gửi phản hồi
 					</button>
