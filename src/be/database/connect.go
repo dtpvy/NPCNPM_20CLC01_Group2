@@ -26,7 +26,6 @@ func Connect() *gorm.DB {
 	env := os.Getenv("ENV")
 	dev := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
 	prod := os.Getenv("DATABASE_PROD")
-	fmt.Println(env, prod)
 	if env == "dev" {
 		db, err := gorm.Open(postgres.Open(dev), &gorm.Config{})
 		CheckErr(err)
