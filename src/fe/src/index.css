@@ -4,6 +4,6 @@
 @tailwind utilities;
 
 body {
-	font-family: "Times New Romans", sans-serif !important;
-	box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
+  box-sizing: border-box;
 }

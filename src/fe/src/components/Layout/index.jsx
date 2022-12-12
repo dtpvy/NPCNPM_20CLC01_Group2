@@ -1,15 +1,18 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-
+import Header from "../Header/Header.jsx";
 const Layout = () => {
-	return (
-		<div className="h-screen w-screen">
-			<header className="h-1/6 bg-orange-600">Header</header>
-			<div className="bg-slate-200">
-				<Outlet />
-			</div>
-		</div>
-	);
+
+  return (
+    <div>
+      <header>
+        <Header />
+      </header>
+      <Outlet />
+      <footer></footer>
+    </div>
+  );
+
 };
 
 export default Layout;
