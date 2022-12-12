@@ -10,32 +10,28 @@ export default function request({
   headers,
   method,
 }) {
-  const url = params ? path + "?" + queryString.stringify(params) : path;
   const token = localStorage.getItem("access-token");
   console.log({ token });
   return new Promise((resolve, reject) => {
     axios
       .request({
-        url,
-        baseURL: baseUrl || BASE_URL.prod,
+        url: path,
+        baseURL: baseUrl || BASE_URL.dev,
+        params,
         method,
         data,
         headers: {
-          "Content-Type":
-            "application/x-www-form-urlencoded; charset=UTF-8;application/json",
+          "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
           ...(token && { "access-token": token }),
           ...headers,
         },
       })
       .then((res) => {
-        console.log("res", res);
-        // resolve(res.data);
+        resolve(res.data);
       })
       .catch((res) => {
-        console.log("err", res);
-        // reject(res);
+        reject(res.response.data);
       });
   });
 }

@@ -4,13 +4,13 @@ export async function loginAPI({ email, password }) {
   try {
     const res = await request({
       path: "auth/login",
-      method: "POST",
+      method: "post",
       data: {
         email,
         password,
       },
     });
-    console.log(res);
+    return res.data;
   } catch (err) {
     console.log(err);
     return null;
