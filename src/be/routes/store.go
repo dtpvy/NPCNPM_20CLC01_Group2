@@ -1,34 +1,21 @@
 package routes
 
-// import (
-// 	"encoding/json"
-// 	db "main/database"
-// 	md "main/models"
-// 	"main/utils"
-// 	"net/http"
+import (
+	"main/controllers"
+	mid "main/middlewares"
 
-// 	"github.com/julienschmidt/httprouter"
-// )
+	"github.com/julienschmidt/httprouter"
+)
 
-// func GetStoreById(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-// 	w.Header().Set("Content-Type", "application/json")
-// 	_db := db.Connect()
-// 	uRows, err := _db.Query(`SELECT * FROM public."USER" WHERE id=$1`, ps.ByName("seller_id"))
-// 	db.CheckErr(err)
-// 	user := utils.GetUser(uRows)
-// 	cRows, err := _db.Query(`SELECT * FROM public."COLLECTION" WHERE seller_id=$1`, ps.ByName("seller_id"))
-// 	collections := utils.GetCollectionList(cRows)
-// 	pRows, err := _db.Query(`SELECT PR.* FROM public."COLLECTION" AS CO JOIN public."COLLECTION_DETAIL" AS CD ON CO."id" = CD."collection_id" JOIN public."PRODUCT" as PR ON CD."product_id" = PR."id" WHERE CO."seller_id" = $1`, ps.ByName("seller_id"))
-// 	products := utils.GetProductList(pRows, true)
-// 	collectionDetail := make(map[string][]md.Product)
-// 	for i := 0; i < len(products); i++ {
-// 		collection_id := products[i].CollectionId
-// 		collectionDetail[collection_id] = append(collectionDetail[collection_id], products[i])
-// 	}
-// 	for i := 0; i < len(collections); i++ {
-// 		collections[i].Products = collectionDetail[collections[i].Id]
-// 	}
-// 	store := md.Store{User: user, Collection: collections}
-// 	var response = md.BuildResponse(store)
-// 	json.NewEncoder(w).Encode(response)
-// }
+func StoreRouter(router *httprouter.Router) {
+	router.POST("/store/collection/create", mid.VerifyJWT(controllers.CreateCollection))
+	router.POST("/store/product/create", mid.VerifyJWT(controllers.CreateProduct))
+	router.GET("/store/product", controllers.GetProductCollection)
+	router.GET("/store/collection_list/:seller_name", controllers.GetListCollection)
+	router.GET("/store/info/:seller_name", controllers.GetStore)
+	router.PUT("/store/product/update", controllers.Login)
+	router.PUT("/store/collection_info/update", mid.VerifyJWT(controllers.UpdateCollectionInformation))
+	router.POST("/store/collection_info/add_product", mid.VerifyJWT(controllers.AddProductCollection))
+	router.DELETE("/store/collection_info/delete_product", mid.VerifyJWT(controllers.DeleteProductCollection))
+	router.DELETE("/store/collection", mid.VerifyJWT(controllers.DeleteCollection))
+}

@@ -1,10 +1,13 @@
 package db
 
 import (
-	"database/sql"
 	"fmt"
+	"log"
+	"os"
 
-	_ "github.com/lib/pq"
+	"github.com/joho/godotenv"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 const (
@@ -12,7 +15,7 @@ const (
 	port     = 5432
 	user     = "postgres"
 	password = "123"
-	dbname   = "database"
+	dbname   = "webanhang"
 )
 
 func CheckErr(err error) {
@@ -21,21 +24,31 @@ func CheckErr(err error) {
 	}
 }
 
-func Connect() *sql.DB {
-	dev := fmt.Sprintf("host=%s port=%d user=%s "+
-		"password=%s dbname=%s sslmode=disable",
-		host, port, user, password, dbname)
-	prod := "postgres://admin:TCRNYJdkQhyB7b13XBUagBfYQ5oBM0Dy@dpg-ce253hta4996ndufp8v0-a.oregon-postgres.render.com/database_917j"
-	env := "prod"
-	if env == "dev" {
-		db, err := sql.Open("postgres", dev)
+func Connect() *gorm.DB {
+	err := godotenv.Load("process.env")
+	if err != nil {
+		log.Fatalf("Some error occured. Err: %s", err)
+	}
+	env, ok := os.LookupEnv("ENV")
+	if !ok {
+		log.Fatalln("Missing MySQL connection string")
+	}
+	dev := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
+	prod := os.Getenv("DATABASE_PROD")
+	if env == "prod" {
+		db, err := gorm.Open(postgres.Open(prod), &gorm.Config{})
 		CheckErr(err)
 
 		return db
 	} else {
-		db, err := sql.Open("postgres", prod)
+		db, err := gorm.Open(postgres.Open(dev), &gorm.Config{})
 		CheckErr(err)
 
 		return db
 	}
+}
+
+func Close(db *gorm.DB) {
+	dbInstance, _ := db.DB()
+	_ = dbInstance.Close()
 }

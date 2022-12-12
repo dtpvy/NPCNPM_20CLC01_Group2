@@ -2,5 +2,5 @@ package md
 
 type Store struct {
 	User       User         `json:"user"`
-	Collection []Collection `json:"collection"`
+	Collection []Collection `gorm:"foreignKey:SellerId" json:"store"`
 }

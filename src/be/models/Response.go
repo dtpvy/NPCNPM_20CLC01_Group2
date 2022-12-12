@@ -6,6 +6,10 @@ type Response struct {
 	Data   interface{} `json:"data"`
 }
 
+type Message struct {
+	Message string `json:"message"`
+}
+
 type ErrorResponse struct {
 	Message string `json:"message"`
 }
@@ -17,6 +21,15 @@ func BuildResponse(data interface{}) Response {
 		Status: "SUCCESS",
 		Errors: nil,
 		Data:   data,
+	}
+	return res
+}
+
+func BuildMessageResponse(message string) Response {
+	res := Response{
+		Status: "SUCCESS",
+		Errors: nil,
+		Data:   Message{Message: message},
 	}
 	return res
 }
