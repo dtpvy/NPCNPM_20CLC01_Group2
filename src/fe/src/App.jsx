@@ -7,9 +7,11 @@ import Cart from "./pages/CartDetail";
 const App = () => {
   return (
     <Routes>
-      <Route path="/" element={<Layout />}></Route>
-      <Route path="/order" element={<Order />}></Route>
-      <Route path="/cart-detail" element={<Cart />}></Route>
+      <Route path="/" element={<Layout />}> 
+        <Route path="order" element={<Order />} />
+        <Route path="cart-detail" element={<Cart />} />
+      </Route>
+     
     </Routes>
     
   );
