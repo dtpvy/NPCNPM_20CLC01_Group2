@@ -4,16 +4,25 @@ import { Routes, Route } from "react-router-dom";
 import Home from "./components/Home/index.jsx";
 import SellerProfile from "./components/Seller Profile/index.jsx";
 import Layout from "./components/Layout";
-import Order from "./pages/order";
-import Cart from "./pages/CartDetail";
+import Support from "./Components/Support";
+import Order from "./Pages/order";
+import Cart from "./Pages/CartDetail";
 import ProductDetail from "./components/ProductDetail";
 import Login from "./components/Login";
 import Register from "./Components/Register";
 import Profile from "./Components/Profile/Profile.jsx";
 import Bought from "./Components/Profile/bought.jsx";
 import EditProfile from "./Components/Profile/editProfile.jsx";
+import { useEffect } from "react";
+import { loginAPI } from "./Services/account.js";
 
 const App = () => {
+  useEffect(() => {
+    loginAPI({ email: "admin@gmail.com", password: "admin" }).then((res) => {
+      console.log(res);
+    });
+  }, []);
+
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
