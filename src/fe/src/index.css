@@ -7,3 +7,10 @@ body {
   font-family: "Roboto", sans-serif;
   box-sizing: border-box;
 }
+
+@layer components {
+	.Title-Grid {
+		display: grid;
+		grid-template-columns: 398px 190px 130px 130px 30px;
+	} 
+}
