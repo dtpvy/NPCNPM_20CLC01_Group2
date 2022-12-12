@@ -101,18 +101,7 @@ const Order = () => {
                          <span className="font-semibold text-sm uppercase pr-2">Số món hàng</span>
                         <span className="font-semibold text-sm uppercase">3</span> 
                     </div>
-                    {/* <div>
-                        <label className="font-medium inline-block mb-3 text-sm uppercase">Shipping</label>
-                        <select className="block p-2 text-gray-600 w-full text-sm">
-                            <option>Standard shipping - $10.00</option>
-                        </select>
-                    </div> */}
-                    {/* <div className="py-10">
-                        <label for="promo" className="font-semibold inline-block mb-3 text-sm uppercase">Promo Code</label>
-                        <input type="text" id="promo" placeholder="Enter your code" className="p-2 text-sm w-full"/>
-                    </div>
-                    <button className="bg-red-500 hover:bg-red-600 px-5 py-2 text-sm text-white uppercase">Apply</button> */}
-                    <div className="border-t mt-8">
+                   <div className="border-t mt-8">
                         <div className="flex font-semibold justify-between py-6 text-sm uppercase">
                             <span>Tổng tiền</span>
                             <span>1 800 000 vnđ</span>

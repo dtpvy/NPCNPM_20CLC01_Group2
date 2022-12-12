@@ -8,8 +8,8 @@ const Order = () => {
       <div className='flex justify-between mx-4'>
         {/* Address of customer */}
         <div className="w-1/3">
-          <div>ĐỊA CHỈ NGƯỜI NHẬN</div>
-          <ul className="bg-gray-200 px-2 h-24">
+          <div className="font-semibold text-2xl">ĐỊA CHỈ NGƯỜI NHẬN</div>
+          <ul className="bg-[#f5f5fa] px-2 h-24">
             <li>Vy Do</li>
             <li><span>Địa chỉ:</span> 227 Nguyễn Văn Cừ, quận 5</li>
             <li><span>Số điện thoại:</span> 0349732872</li>
@@ -17,8 +17,8 @@ const Order = () => {
         </div>
         {/* "Mode-Of-Delivery" */}
         <div className="w-1/3">
-          <div className="mx-2">HÌNH THỨC GIAO HÀNG</div>
-          <ul className="bg-gray-200 mx-2 px-2 h-24">
+          <div className="mx-2 font-semibold text-2xl" >HÌNH THỨC GIAO HÀNG</div>
+          <ul className="bg-[#f5f5fa] mx-2 px-2 h-24">
               <li>Giao tiết kiệm</li>
               <li>Giao vào Thứ tư, 12/10</li>
               <li>Được giao bởi NGUYENVUSTORE</li>
@@ -27,8 +27,8 @@ const Order = () => {
         </div>
         {/* Mode-Of-Payment */}
         <div className="w-1/3">
-          <div>HÌNH THỨC THANH TOÁN</div>
-          <ul className="bg-gray-200 px-2 h-24">
+          <div className="font-semibold text-2xl">HÌNH THỨC THANH TOÁN</div>
+          <ul className="bg-[#f5f5fa] px-2 h-24 ">
             <li>Thanh toán bằng ví Moca|Grab</li>
             <li><i>Thanh toán thành công</i></li>
           </ul>
@@ -36,7 +36,7 @@ const Order = () => {
       </div>
 
       {/*information of product  */}
-      <table className="bg-gray-200 my-4 ml-4 mr-4 w-full">
+      <table className="bg-[#f5f5fa] my-4 ml-4 mr-4 w-full">
         <thead>
           <tr className="px-5 py-1.5 text-left">
             <th>Sản phẩm</th>
@@ -56,9 +56,32 @@ const Order = () => {
                   <a href="link dẫn tới sản phẩm">Bảng Vẽ Điện Tử Gaomon 1060Pro - 10x6 inch</a>
                   <p>Cung cấp bởi Tiki Trading</p>
                   <div className=""> 
-                    <span className="border-solid border-2 border-sky-500 divide-gray-100 mr-2">Chat với nhà bán</span>
-                    <span className="border-solid border-2 border-sky-500 mx-2">Viết nhận xét</span>
-                    <span className="border-solid border-2 border-sky-500 mx-2">Mua lại</span>
+                    <span className="border-solid border-2   divide-gray-100 mr-2">Chat với nhà bán</span>
+                    <span className="border-solid border-2   mx-2">Viết nhận xét</span>
+                    <span className="border-solid border-2   mx-2">Mua lại</span>
+                  </div>
+                </div>
+            </td>
+            <td> {/*Giá*/}
+              92.000 đ
+            </td>
+            <td>1</td>
+            <td>0 đ</td>
+            <td>92.000 đ</td>
+          </tr>
+          <br />
+          <tr>
+            <td className="flex"> {/*"Sản phẩm"*/}
+                <div>{/* image of product */}
+                  <img className='w-24 h-24 object-cover' src={productImg} alt="Bảng Vẽ Điện Tử Gaomon 1060Pro - 10x6 inch" />
+                </div>
+                <div className="flex flex-col justify-between mx-2">{/* Name product & describe */}
+                  <a href="link dẫn tới sản phẩm">Bảng Vẽ Điện Tử Gaomon 1060Pro - 10x6 inch</a>
+                  <p>Cung cấp bởi Tiki Trading</p>
+                  <div className=""> 
+                    <span className="border-solid border-2  divide-gray-100 mr-2">Chat với nhà bán</span>
+                    <span className="border-solid border-2  mx-2">Viết nhận xét</span>
+                    <span className="border-solid border-2  mx-2">Mua lại</span>
                   </div>
                 </div>
             </td>
