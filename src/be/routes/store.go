@@ -13,7 +13,7 @@ func StoreRouter(router *httprouter.Router) {
 	router.GET("/store/product", controllers.GetProductCollection)
 	router.GET("/store/collection_list/:seller_name", controllers.GetListCollection)
 	router.GET("/store/info/:seller_name", controllers.GetStore)
-	router.PUT("/store/product/update", controllers.Login)
+	router.PUT("/store/product/update", mid.VerifyJWT(controllers.UpdateProduct))
 	router.PUT("/store/collection_info/update", mid.VerifyJWT(controllers.UpdateCollectionInformation))
 	router.POST("/store/collection_info/add_product", mid.VerifyJWT(controllers.AddProductCollection))
 	router.DELETE("/store/collection_info/delete_product", mid.VerifyJWT(controllers.DeleteProductCollection))

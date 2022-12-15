@@ -14,6 +14,8 @@ func main() {
 	routes.AuthRouter(router)
 	routes.UserRouter(router)
 	routes.StoreRouter(router)
+	routes.ProductRouter(router)
+	routes.CaterodyRouter(router)
 	// router.POST("/auth/register", routes.Register)
 	// router.GET("/home/category", routes.GetCategories)
 	// router.GET("/home/product", routes.GetProductSuggestion)

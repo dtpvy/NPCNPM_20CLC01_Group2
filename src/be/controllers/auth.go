@@ -111,7 +111,8 @@ func Register(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 			json.NewEncoder(w).Encode(response)
 			return
 		}
-		var response = AuthResponse{User: MappingUserResponse(user), AccessToken: md.GenerateToken(user.Id)}
+		var res = AuthResponse{User: MappingUserResponse(user), AccessToken: md.GenerateToken(user.Id)}
+		var response = md.BuildResponse(res)
 		json.NewEncoder(w).Encode(response)
 	}
 }

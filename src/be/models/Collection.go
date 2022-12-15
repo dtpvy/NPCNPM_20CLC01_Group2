@@ -7,7 +7,7 @@ type Collection struct {
 	Name      string    `json:"name"`
 	Image     string    `json:"image"`
 	SellerId  string    `json:"seller_id"`
-	Products  []Product `gorm:"foreignKey:CollectionId" json:"products"`
+	Products  []Product `gorm:"-" json:"products"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }
