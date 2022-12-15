@@ -26,17 +26,20 @@ const App = () => {
 
 	return (
 		<Routes>
-			<Route path="/" element={<Layout />} />
-			<Route path="bought" element={<Bought />} />
-			<Route path="profile" element={<Profile />} />
-			<Route path="editprofile" element={<EditProfile />} />
-			<Route path="home" element={<Home />} />
-			<Route path="seller-profile" element={<SellerProfile />} />
-			<Route path="support" element={<Support />} />
-			<Route path="detail/:id" element={<ProductDetail />} />
-			<Route path="order" element={<Order />} />
-			<Route path="cart-detail" element={<Cart />} />
-			<Route path="payment" element={<Payment />} />
+			<Route path="/" element={<Layout />}>
+				<Route index element={<Home />} />
+				<Route path="profile">
+					<Route index element={<Profile />} />
+					<Route path="edit" element={<EditProfile />} />
+					<Route path="seller-profile" element={<SellerProfile />} />
+				</Route>
+				<Route path="detail/:id" element={<ProductDetail />} />
+				<Route path="bought" element={<Bought />} />
+				<Route path="order" element={<Order />} />
+				<Route path="cart-detail" element={<Cart />} />
+				<Route path="payment" element={<Payment />} />
+				<Route path="support" element={<Support />} />
+			</Route>
 		</Routes>
 	);
 };
