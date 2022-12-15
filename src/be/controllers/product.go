@@ -10,7 +10,6 @@ import (
 )
 
 func GetProductDetail(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	w.Header().Set("Content-Type", "application/json")
 	id := ps.ByName("id")
 	_db := db.Connect()
 	var product md.ProductDetail
@@ -20,7 +19,6 @@ func GetProductDetail(w http.ResponseWriter, r *http.Request, ps httprouter.Para
 }
 
 func GetProductSearch(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	w.Header().Set("Content-Type", "application/json")
 	id := ps.ByName("id")
 	_db := db.Connect()
 	var product md.ProductDetail

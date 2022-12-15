@@ -13,7 +13,6 @@ const ADMIN_ID = "4d94422a-5471-4828-a122-dcf2ad249e7a"
 
 func CreateCategory(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	userId := r.Context().Value("user_id")
-	w.Header().Set("Content-Type", "application/json")
 	payload := make(map[string]string)
 	json.NewDecoder(r.Body).Decode(&payload)
 	_db := db.Connect()
@@ -29,7 +28,6 @@ func CreateCategory(w http.ResponseWriter, r *http.Request, ps httprouter.Params
 }
 
 func UpdateCategory(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	w.Header().Set("Content-Type", "application/json")
 	id := ps.ByName("id")
 	_db := db.Connect()
 	var product md.ProductDetail
@@ -46,7 +44,6 @@ func UpdateCategory(w http.ResponseWriter, r *http.Request, ps httprouter.Params
 }
 
 func GetCategoryList(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	w.Header().Set("Content-Type", "application/json")
 	_db := db.Connect()
 	var categories []md.Category
 	_db.Find(&categories)

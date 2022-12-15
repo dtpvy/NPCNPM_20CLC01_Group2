@@ -34,7 +34,6 @@ func (u *Collection) BeforeCreate(tx *gorm.DB) (err error) {
 
 func CreateCollection(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	userId := r.Context().Value("user_id")
-	w.Header().Set("Content-Type", "application/json")
 	payload := make(map[string]string)
 	err := json.NewDecoder(r.Body).Decode(&payload)
 	_db := db.Connect()
@@ -51,7 +50,6 @@ func CreateCollection(w http.ResponseWriter, r *http.Request, ps httprouter.Para
 
 func CreateProduct(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	userId := r.Context().Value("user_id")
-	w.Header().Set("Content-Type", "application/json")
 	payload := make(map[string]interface{})
 	json.NewDecoder(r.Body).Decode(&payload)
 	product := md.Product{
@@ -86,7 +84,6 @@ func CreateProduct(w http.ResponseWriter, r *http.Request, ps httprouter.Params)
 }
 
 func GetListCollection(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	w.Header().Set("Content-Type", "application/json")
 	sellerName := ps.ByName("seller_name")
 	_db := db.Connect()
 	var collections []Collection
@@ -102,25 +99,22 @@ func GetListCollection(w http.ResponseWriter, r *http.Request, ps httprouter.Par
 }
 
 func GetStore(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	sellerName := ps.ByName("seller_name")
+	id := ps.ByName("id")
 	_db := db.Connect()
 	var collections []md.Collection
-	_db.Table("users").Select("*").Joins("left join collections on collections.seller_id = users.id").Where("users.seller_name = ?", sellerName).Order("collections.created_at asc").Scan(&collections)
+	_db.Table("users").Select("*").Joins("left join collections on collections.seller_id = users.id").Where("users.id = ?", id).Order("collections.created_at asc").Scan(&collections)
 	for i := 0; i < len(collections); i++ {
 		var products []md.Product
-		_db.Table("products").Select("products.*, collections.id as collection_id, categories.*").Joins("left join categories on categories.id = products.category_id").Joins("left join collection_details on collection_details.product_id = products.id").Joins("left join collections on collections.id = collection_details.collection_id").Where("collections.id = ?", collections[i].Id).Order("products.created_at desc").Scan(&products)
+		_db.Table("products").Preload("Category").Select("products.*").Joins("left join categories on categories.id = products.category_id").Joins("left join collection_details on collection_details.product_id = products.id").Joins("left join collections on collections.id = collection_details.collection_id").Where("collections.id = ?", collections[i].Id).Order("products.created_at desc").Scan(&products)
 		collections[i].Products = products
 	}
 	store := md.Store{Collection: collections}
-	_db.Where("seller_name = ?", sellerName).First(&store.User)
+	_db.Where("id = ?", id).First(&store.User)
 	var response = md.BuildResponse(store)
 	json.NewEncoder(w).Encode(response)
 }
 
 func GetProductCollection(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	w.Header().Set("Content-Type", "application/json")
 	collectionId := r.URL.Query().Get("collection_id")
 	sortType := r.URL.Query().Get("st")
 	sort := r.URL.Query().Get("sort")
@@ -145,7 +139,6 @@ func GetProductCollection(w http.ResponseWriter, r *http.Request, ps httprouter.
 
 func UpdateCollectionInformation(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	userId := r.Context().Value("user_id")
-	w.Header().Set("Content-Type", "application/json")
 	collection := make(map[string]interface{})
 	json.NewDecoder(r.Body).Decode(&collection)
 	_db := db.Connect()
@@ -163,7 +156,6 @@ func UpdateCollectionInformation(w http.ResponseWriter, r *http.Request, _ httpr
 
 func UpdateProduct(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	userId := r.Context().Value("user_id")
-	w.Header().Set("Content-Type", "application/json")
 	product := make(map[string]interface{})
 	json.NewDecoder(r.Body).Decode(&product)
 	_db := db.Connect()
@@ -181,7 +173,6 @@ func UpdateProduct(w http.ResponseWriter, r *http.Request, _ httprouter.Params) 
 
 func AddProductCollection(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	userId := r.Context().Value("user_id")
-	w.Header().Set("Content-Type", "application/json")
 	payload := make(map[string]interface{})
 	json.NewDecoder(r.Body).Decode(&payload)
 	_db := db.Connect()
@@ -213,7 +204,6 @@ func AddProductCollection(w http.ResponseWriter, r *http.Request, _ httprouter.P
 
 func DeleteProductCollection(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	userId := r.Context().Value("user_id")
-	w.Header().Set("Content-Type", "application/json")
 	payload := make(map[string]interface{})
 	json.NewDecoder(r.Body).Decode(&payload)
 	_db := db.Connect()
@@ -242,7 +232,6 @@ func DeleteProductCollection(w http.ResponseWriter, r *http.Request, _ httproute
 
 func DeleteCollection(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	userId := r.Context().Value("user_id")
-	w.Header().Set("Content-Type", "application/json")
 	payload := make(map[string]interface{})
 	json.NewDecoder(r.Body).Decode(&payload)
 	_db := db.Connect()

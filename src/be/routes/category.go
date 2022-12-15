@@ -8,6 +8,6 @@ import (
 )
 
 func CaterodyRouter(router *httprouter.Router) {
-	router.POST("/category/create", mid.VerifyJWT(controllers.CreateCategory))
-	router.GET("/category_list", controllers.GetCategoryList)
+	router.POST("/category/create", mid.AddHeader(mid.VerifyJWT(controllers.CreateCategory)))
+	router.GET("/category_list", mid.AddHeader(controllers.GetCategoryList))
 }

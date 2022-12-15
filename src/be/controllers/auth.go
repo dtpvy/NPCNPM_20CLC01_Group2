@@ -61,7 +61,6 @@ func CheckPasswordHash(password, hash string) bool {
 }
 
 func Login(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	w.Header().Set("Content-Type", "application/json")
 	payload := make(map[string]string)
 	err := json.NewDecoder(r.Body).Decode(&payload)
 	db.CheckErr(err)
@@ -84,7 +83,6 @@ func Login(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 }
 
 func Register(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	w.Header().Set("Content-Type", "application/json")
 	payload := make(map[string]string)
 	err := json.NewDecoder(r.Body).Decode(&payload)
 	db.CheckErr(err)

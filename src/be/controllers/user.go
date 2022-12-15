@@ -11,7 +11,6 @@ import (
 
 func GetUserInfo(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	userId := r.Context().Value("user_id")
-	w.Header().Set("Content-Type", "application/json")
 	_db := db.Connect()
 	var user User
 
@@ -22,22 +21,14 @@ func GetUserInfo(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 func UpdateUserInfo(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	userId := r.Context().Value("user_id")
-	w.Header().Set("Content-Type", "application/json")
 	user := make(map[string]interface{})
-	err := json.NewDecoder(r.Body).Decode(&user)
-	if err != nil {
-		w.WriteHeader(400)
-		var response = md.BuildErrorResponse("Update user information failed", nil)
-		json.NewEncoder(w).Encode(response)
-		return
-	}
+	json.NewDecoder(r.Body).Decode(&user)
 	_db := db.Connect()
 	if user["seller_name"] != nil {
 		var users []User
 		_db.Where("seller_name = ? and id <> ?", user["seller_name"], userId).Find(&users)
 		if len(users) > 0 {
-			w.WriteHeader(400)
-			var response = md.BuildErrorResponse("Seller name is exist", nil)
+			var response = md.BuildMessageResponse("Seller name is exist")
 			json.NewEncoder(w).Encode(response)
 			return
 		}
@@ -57,7 +48,6 @@ func UpdateUserInfo(w http.ResponseWriter, r *http.Request, _ httprouter.Params)
 
 func GetUserOrders(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	userId := r.Context().Value("user_id")
-	w.Header().Set("Content-Type", "application/json")
 	_db := db.Connect()
 	var user User
 
