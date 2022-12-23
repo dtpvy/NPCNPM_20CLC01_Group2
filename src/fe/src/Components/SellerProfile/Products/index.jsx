@@ -25,13 +25,13 @@ export default function Products() {
 			<div className="flex items-center justify-between mb-5">
 				<div className="flex gap-2">
 					<div className="text-lg">Sắp xếp theo:</div>
-					<div className="bg-white w-20 flex items-center justify-center rounded-md hover:bg-slate-300">
+					<div className="bg-white w-20 cursor-pointer flex items-center justify-center rounded-md hover:bg-slate-300">
 						Mới nhất
 					</div>
-					<div className="bg-white w-20 flex items-center justify-center rounded-md hover:bg-slate-300">
+					<div className="bg-white w-20 cursor-pointer flex items-center justify-center rounded-md hover:bg-slate-300">
 						Giá
 					</div>
-					<div className="bg-white w-20 flex items-center justify-center rounded-md hover:bg-slate-300">
+					<div className="bg-white w-20 cursor-pointer flex items-center justify-center rounded-md hover:bg-slate-300">
 						Phổ Biến
 					</div>
 				</div>
