@@ -1,108 +1,221 @@
-import React from "react";
+import React, { useState, useRef } from "react";
 
-import account from "./account.png";
-import bill from "./bill.png";
-import sp from "./sp.png";
+import avatar from "./avatar.png";
+import Template from "./Template";
+
+const data = [
+	{ name: "Tên đăng nhập", value: "Caiminhchanh" },
+	{ name: "Tên người dùng", value: "MinhChanh" },
+	{ name: "Email", value: "cmchanh@yahoo.com" },
+	{ name: "Số điện thoại", value: "0123456789" },
+	{ name: "Giới tính", value: "Nam" },
+	{ name: "Ngày sinh", value: "28/03/2002" },
+];
 
 export default function EditProfile() {
+	const usernameRef = useRef();
+	const fullnameRef = useRef();
+	const emailRef = useRef();
+	const phoneRef = useRef();
+
+	const [gender, setGender] = useState(data[4].value);
+	const dob = data[5].value.split("/");
+	const [day, setDay] = useState(dob[0]);
+	const [month, setMonth] = useState(dob[1]);
+	const [year, setYear] = useState(dob[2]);
+
 	return (
 		<div>
-			{/* Header */}
-			{/* <header><Header/></header> */}
-			{/* body */}
-			<div class="grid grid-cols-3 gap-4 px-8">
-				<div class="flex-row">
-					<div class="bg-gray-100 p-5">
-						{/* <div class="h-10"><img src={avatar}  /></div> */}
-						<div class="font-bold">Cái Minh Chánh</div>
-						<div class="opacity-60">Sửa hồ sơ</div>
-					</div>
-				</div>
-				<div class="bg-gray-100 col-span-2 p-5">
-					<div class="text-xl font-semibold">Hồ sơ của tôi</div>
-					<div class="opacity-60">Quản lý thông tin hồ sơ để bảo mật tài khoản</div>
-				</div>
-				<div class=" p-5 flex flex-col gap-y-7 ">
-					<div class="flex flex-row gap-x-2">
-						<img class="" src={account} alt="" />
-						<button class="text-2xl">Tài khoản của tôi</button>
-					</div>
-					<div class="flex flex-row gap-x-2">
-						<img class="" src={bill} alt="" />
-						<button class="text-2xl">Đơn hàng đã mua</button>
-					</div>
-					<div class="flex flex-row gap-x-2">
-						<img class="w-12 h-12" src={sp} alt="" />
-						<button class="text-2xl">Yêu cầu hỗ trợ</button>
-					</div>
-				</div>
-				<div class="p-5 flex-col ">
-					<form action="">
-						<div class="grid grid-cols-2 gap-4">
-							<div class="flex flex-col justify-end gap-y-7 opacity-70">
-								cột 1<div>Tên đăng nhập</div>
-								<div>Tên người dùng</div>
-								<div>Email</div>
-								<div>Số điện thoại</div>
-								<div>Giới tính</div>
-								<div>Ngày sinh</div>
+			<Template>
+				<form
+					className="px-5"
+					onSubmit={(e) => {
+						e.preventDefault();
+						console.log(usernameRef.current.value);
+						console.log(fullnameRef.current.value);
+						console.log(emailRef.current.value);
+						console.log(phoneRef.current.value);
+					}}>
+					<div className="grid grid-cols-[1.5fr_3fr] mb-5">
+						<div className="flex flex-col gap-4">
+							{data.map((field) => {
+								return (
+									<div key={field.name} className="text-slate-500 border-2 border-transparent py-1">
+										{field.name}:
+									</div>
+								);
+							})}
+						</div>
+						<div className="flex flex-col gap-4">
+							<input
+								ref={usernameRef}
+								name="username"
+								defaultValue={data[0].value}
+								className="w-full border-2 border-slate-300 px-2 py-1"
+							/>
+							<input
+								ref={fullnameRef}
+								name="fullname"
+								defaultValue={data[1].value}
+								className="w-full border-2 border-slate-300 px-2 py-1"
+							/>
+							<input
+								ref={emailRef}
+								name="email"
+								defaultValue={data[2].value}
+								className="w-full border-2 border-slate-300 px-2 py-1"
+							/>
+							<input
+								ref={phoneRef}
+								name="phone"
+								defaultValue={data[3].value}
+								className="w-full border-2 border-slate-300 px-2 py-1"
+							/>
+							<div className="flex gap-4 w-full border-2 border-transparent py-1">
+								{genders.map((g) => {
+									<div className="flex gap-1">
+										<input
+											key={g}
+											type="radio"
+											name={g}
+											checked={gender === g}
+											onChange={() => {
+												setGender(g);
+											}}
+										/>
+										<label htmlFor={g}>{g}</label>
+									</div>;
+								})}
+								<div className="flex gap-1">
+									<input
+										type="radio"
+										id="nam"
+										name="gioitinh"
+										checked={gender === "Nam"}
+										onChange={() => {
+											setGender("Nam");
+										}}
+									/>
+									<label htmlFor="gioitinh">Nam</label>
+								</div>
+								<div className="flex gap-1">
+									<input
+										type="radio"
+										id="nu"
+										name="gioitinh"
+										checked={gender === "Nữ"}
+										onChange={() => {
+											setGender("Nữ");
+										}}
+									/>
+									<label htmlFor="gioitinh">Nữ</label>
+								</div>
+								<div className="flex gap-1">
+									<input
+										type="radio"
+										id="khac"
+										name="gioitinh"
+										checked={gender === "Khác"}
+										onChange={() => {
+											setGender("Khác");
+										}}
+									/>
+									<label htmlFor="gioitinh">Khác</label>
+								</div>
 							</div>
-							<div class="flex flex-col gap-y-7">
-								cột 2<div>Caiminhchanh</div>
-								<div>MinhChanh</div>
-								<div>cm********@yahoo.com</div>
-								<div>*********36</div>
-								<div class="flex flex-row gap-2">
-									<input type="radio" id="nam" name="gioitinh" />
-									<label for="gioitinh">Nam</label>
-									<input type="radio" id="nu" name="gioitinh" />
-									<label for="gioitinh">Nữ</label>
-									<input type="radio" id="khac" name="gioitinh" />
-									<label for="gioitinh">Khác</label>
-								</div>
-								<div>
-									<label for="date"></label>
-									<select class="w-14" name="birthday" id="date">
-										<option value="28">28</option>
-										<option value="29">29</option>
-										<option value="30">30</option>
-										<option value="31">31</option>
-									</select>
+							<div className="flex gap-2 w-full border-2 border-transparent py-1">
+								<select
+									className="w-14 bg-slate-200 px-2 py-1 hover:bg-slate-300 rounded-sm"
+									name="day"
+									value={day}
+									onChange={(e) => {
+										setDay(e.target.value);
+									}}>
+									{days.map((x) => {
+										return (
+											<option key={x} value={x}>
+												{x}
+											</option>
+										);
+									})}
+								</select>
 
-									<label for="month"></label>
-									<select class="w-14" name="birthday" id="month">
-										<option value="3">03</option>
-										<option value="4">04</option>
-										<option value="5">05</option>
-										<option value="6">06</option>
-									</select>
+								<select
+									className="w-14 bg-slate-200 px-2 py-1 hover:bg-slate-300 rounded-sm"
+									name="month"
+									value={month}
+									onChange={(e) => {
+										setMonth(e.target.value);
+									}}>
+									{months.map((x) => {
+										return (
+											<option key={x} value={x}>
+												{x}
+											</option>
+										);
+									})}
+								</select>
 
-									<label for="year"></label>
-									<select class="w-14" name="birthday" id="year">
-										<option value="2002">2002</option>
-										<option value="2003">2003</option>
-										<option value="2004">2004</option>
-										<option value="2006">2006</option>
-									</select>
-								</div>
+								<select
+									className="w-20 bg-slate-200 px-2 py-1 hover:bg-slate-300 rounded-sm"
+									name="year"
+									value={year}
+									onChange={(e) => {
+										setYear(e.target.value);
+									}}>
+									{years.map((x) => {
+										return (
+											<option key={x} value={x}>
+												{x}
+											</option>
+										);
+									})}
+								</select>
 							</div>
 						</div>
-					</form>
-					<br />
-					<button class="bg-sky-600 px-3 py-0.5 rounded-lg text-white hover:bg-sky-900">Lưu</button>
-				</div>
-				<div class="p-5 flex flex-col justify-center items-center gap-y-2">
-					<div class="w-24 h-24">
-						<img class="w-24 h-24" src={account} alt="" />
+					</div>
+					<button className="bg-sky-600 px-6 py-1 rounded-md text-white cursor-pointer inline-block hover:bg-sky-800 hover:scale-105 duration-300">
+						Lưu
+					</button>
+				</form>
+				<div className="p-5 flex flex-col justify-center items-center gap-y-2">
+					<div className="w-48 aspect-square p-2 bg-slate-200 rounded-full flex items-center justify-center">
+						<img className="w-full" src={avatar} alt="" />
 					</div>
 
-					<button class="bg-sky-600 px-3 py-0.5 rounded-lg text-white hover:bg-sky-900">
+					<div className="bg-sky-600 px-6 py-1 rounded-md text-white cursor-pointer inline-block hover:bg-sky-800 hover:scale-105 duration-300">
 						Chọn ảnh
-					</button>
-					<div class="flex flex-row opacity-60">Dụng lượng file tối đa 1 MB</div>
-					<div class="flex flex-row opacity-60">Định dạng:.JPEG, .PNG</div>
+					</div>
+					<div className="w-48 mt-4 h-0.5 bg-green-200"></div>
+					<div className="flex flex-col gap-2">
+						<div className="text-slate-500">
+							Dung lượng file tối đa: <span className="text-black">1MB</span>
+						</div>
+						<div className="text-slate-500">
+							Định dạng: <span className="text-black">.JPEG, .PNG</span>
+						</div>
+					</div>
 				</div>
-			</div>
+			</Template>
 		</div>
 	);
 }
+
+const genders = ["Nam", "Nữ", "Khác"];
+
+const days = [...Array(31).keys()].map((x) => {
+	x = x + 1;
+	if (x > 9) return x.toString();
+	return "0" + x.toString();
+});
+
+const months = [...Array(12).keys()].map((x) => {
+	x = x + 1;
+	if (x > 9) return x.toString();
+	return "0" + x.toString();
+});
+
+const years = [...Array(100).keys()].map((x) => {
+	x = parseInt(new Date().getFullYear()) - x;
+	return x.toString();
+});
