@@ -3,15 +3,17 @@ import { Outlet } from "react-router-dom";
 import Header from "../Header";
 
 const Layout = () => {
-  return (
-    <div>
-      <header>
-        <Header />
-      </header>
-      <Outlet />
-      <footer></footer>
-    </div>
-  );
+	return (
+		<div>
+			<header>
+				<Header />
+			</header>
+			<div className="">
+				<Outlet />
+			</div>
+			<footer></footer>
+		</div>
+	);
 };
 
 export default Layout;

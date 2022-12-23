@@ -23,7 +23,7 @@ export default function Category(props) {
 	return (
 		<div className="">
 			<h3 className="text-3xl font-semibold mb-3">Danh mục nổi bật</h3>
-			<div className="grid grid-cols-8 p-4 gap-3 bg-red-500">{Categories}</div>
+			<div className="grid grid-cols-8 py-4 gap-3">{Categories}</div>
 		</div>
 	);
 }
