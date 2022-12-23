@@ -1,7 +1,8 @@
 import React from "react";
 import ProductBox from "../../Home/Suggestion/ProductBox";
+
 export default function Products() {
-	let products = [
+	const products = [
 		{ name: "Quần áo 1", price: "200.0" },
 		{ name: "Điện thoại 1", price: "2000.0" },
 		{ name: "Thiết bị điện tử 1", price: "200.0" },
@@ -15,38 +16,39 @@ export default function Products() {
 		{ name: "Sách 1", price: "200.0" },
 		{ name: "áo 1", price: "200.0" },
 	];
-	let Products = products.map((thing) => {
-		return (
-			<ProductBox
-				widthSmall="w-2/12"
-				widthLarge="w-2/12"
-				product={thing.name}
-				price={thing.price}
-			/>
-		);
+	const Products = products.map((thing, index) => {
+		return <ProductBox key={index} product={thing.name} price={thing.price} />;
 	});
+
 	return (
-		<div className="category-container w-3/4 inline-block ">
-			<div className="flex items-center	justify-between">
-				<div>
-					<p className="inline-block text-xl mx-3 px-3 h-8 w-23 text-center">Sắp xếp theo</p>
-					<p className="inline-block text-xl m-3 bg-white h-8 w-22 px-3 text-center">Mới nhất</p>
-					<p className="inline-block text-xl m-3 bg-white h-8 w-20 text-center">Giá</p>
-					<p className="inline-block text-xl m-3 bg-white h-8 w-22 px-3 text-center">Phổ Biến</p>
+		<div className="">
+			<div className="flex items-center justify-between mb-5">
+				<div className="flex gap-2">
+					<div className="text-lg">Sắp xếp theo:</div>
+					<div className="bg-white w-20 flex items-center justify-center rounded-md hover:bg-slate-300">
+						Mới nhất
+					</div>
+					<div className="bg-white w-20 flex items-center justify-center rounded-md hover:bg-slate-300">
+						Giá
+					</div>
+					<div className="bg-white w-20 flex items-center justify-center rounded-md hover:bg-slate-300">
+						Phổ Biến
+					</div>
 				</div>
-				<div className="px-5">
-					<span>1</span>
-					<span>/2</span>
-					<a className="">
+				<div className="flex items-center">
+					<div className="h-8 flex items-center">
+						<span>1</span>
+						<span>/2</span>
+					</div>
+					<div className="h-8 flex items-center">
 						<i className="fa fa-toggle-left	text-xl mx-1 pl-3"></i>
-					</a>
-					<a className="">
+					</div>
+					<div className="h-8 flex items-center">
 						<i className="fa fa-toggle-right text-xl mx-1"></i>
-					</a>
+					</div>
 				</div>
 			</div>
-
-			<div className="flex flex-wrap bg-zinc-100 pb-1.5 pr-1.5 pl-1">{Products}</div>
+			<div className="grid grid-cols-5 gap-3">{Products}</div>
 		</div>
 	);
 }

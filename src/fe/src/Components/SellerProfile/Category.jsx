@@ -1,17 +1,19 @@
 import React from "react";
 
 export default function Category() {
-  let categories = ["Giày thể thao", "Giày sneakers"];
-  let Categories = categories.map((thing) => {
-    return <p className="pb-3 font-medium">{thing}</p>;
-  });
-  return (
-    <div className="w-3/12 inline-block bg-white text-lg rounded pl-7 pt-3">
-      <p className="text-2xl font-bold border-b-2 border-stone-500	pb-3 mr-4">
-        Danh mục
-      </p>
-      <p className="mt-2 py-3 font-medium">Sản phẩm</p>
-      {Categories}
-    </div>
-  );
+	let categories = ["Giày thể thao", "Giày sneakers"];
+	let Categories = categories.map((thing) => {
+		return <p className="font-medium">{thing}</p>;
+	});
+	return (
+		<div className="bg-white text-lg rounded-md px-7 py-5 flex flex-col">
+			<p className="text-2xl font-bold">Danh mục</p>
+			<div className="w-full h-0.5 bg-slate-300 mt-3 mb-1"></div>
+			<p className="font-medium">Sản phẩm</p>
+			<div className="flex gap-2 pl-6">
+				<div className="w-0.5 h-full bg-slate-300"></div>
+				<div className="flex flex-col">{Categories}</div>
+			</div>
+		</div>
+	);
 }
