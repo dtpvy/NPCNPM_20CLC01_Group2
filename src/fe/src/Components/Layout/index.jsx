@@ -4,15 +4,15 @@ import Header from "../Header";
 
 const Layout = () => {
 	return (
-		<div>
-			<header>
+		<>
+			<div className="bg-slate-200 min-h-screen">
 				<Header />
-			</header>
-			<div className="">
-				<Outlet />
+				<div className="pt-10 px-8 pb-20">
+					<Outlet />
+				</div>
 			</div>
-			<footer></footer>
-		</div>
+			<footer className="w-screen h-20 bg-blue-500"></footer>
+		</>
 	);
 };
 

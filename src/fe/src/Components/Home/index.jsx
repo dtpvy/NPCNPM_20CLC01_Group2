@@ -5,7 +5,7 @@ import Suggestion from "./Suggestion";
 
 export default function Home() {
 	return (
-		<div>
+		<div className="flex flex-col gap-14">
 			<Category />
 			<Suggestion />
 		</div>

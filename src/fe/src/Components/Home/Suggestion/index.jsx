@@ -22,9 +22,9 @@ export default function Suggestion(props) {
 	});
 
 	return (
-		<div className="my-5 bg-white">
+		<div className="">
 			<h3 className="text-3xl font-semibold mb-3">Gợi ý hôm nay</h3>
-			<div className="grid grid-cols-5 py-4 gap-5">{Suggestions}</div>
+			<div className="grid grid-cols-5 gap-5 bg-white p-6">{Suggestions}</div>
 		</div>
 	);
 }

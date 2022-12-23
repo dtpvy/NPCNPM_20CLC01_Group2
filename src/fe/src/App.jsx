@@ -32,9 +32,9 @@ const App = () => {
 				<Route path="profile">
 					<Route index element={<Profile />} /> {/*fixed*/}
 					<Route path="edit" element={<EditProfile />} /> {/*fixed*/}
-					<Route path="seller-profile" element={<SellerProfile />} />
+					<Route path="seller-profile" element={<SellerProfile />} /> {/*fixed*/}
 				</Route>
-				<Route path="detail/:id" element={<ProductDetail />} />
+				<Route path="detail/:id" element={<ProductDetail />} /> {/*fixed*/}
 				<Route path="bought" element={<Bought />} />
 				<Route path="order" element={<Order />} />
 				<Route path="cart-detail" element={<Cart />} />
