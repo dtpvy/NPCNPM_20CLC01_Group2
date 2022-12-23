@@ -30,8 +30,8 @@ const App = () => {
 			<Route path="/" element={<Layout />}>
 				<Route index element={<Home />} /> {/*fixed*/}
 				<Route path="profile">
-					<Route index element={<Profile />} />
-					<Route path="edit" element={<EditProfile />} />
+					<Route index element={<Profile />} /> {/*fixed*/}
+					<Route path="edit" element={<EditProfile />} /> {/*fixed*/}
 					<Route path="seller-profile" element={<SellerProfile />} />
 				</Route>
 				<Route path="detail/:id" element={<ProductDetail />} />
