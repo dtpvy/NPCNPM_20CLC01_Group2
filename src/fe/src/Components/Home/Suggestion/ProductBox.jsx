@@ -2,21 +2,20 @@ import React from "react";
 import img from "./hat.jpg";
 
 export default function ProductBox(props) {
-  return (
-    <a
-      href="#"
-      className={`suggestion--product text-center text-black  no-underline pt-2.5  ${props.widthSmall} lg:${props.widthLarge} `}
-    >
-      <div className="relative bg-white ml-1.5 inline-block">
-        <img className="inline-block" src={img} alt="" />
-        <span class="absolute text-sm text-black top-1 right-1">QC</span>
-        <a href="#" className="absolute bottom-6 left-3 lg:left-6">
-          <i className="fa fa-heart-o"></i>
-        </a>
-        <p className="font-semibold h-8">{props.product}</p>
-        <p className="">{props.price}vnđ </p>
-        <span className="text-info my-5">Freeship</span>
-      </div>
-    </a>
-  );
+	return (
+		<div className="relative bg-blue-300 p-2 pb-4 flex flex-col items-start gap-2 rounded-md w-full cursor-pointer hover:scale-105 duration-300 hover:shadow-2xl">
+			<img className="w-full rounded-md mb-3 border-2 border-slate-300" src={img} alt="" />
+
+			<div className="absolute text-sm text-red-500 top-4 right-4">QC</div>
+			{/* <a href="#" className="absolute bottom-6 left-3 lg:left-6">
+					<i className="fa fa-heart-o"></i>
+				</a> */}
+			<p className="font-semibold text-2xl">{props.product}</p>
+			<div className="w-full h-0.5 bg-green-300"></div>
+			<div className="flex justify-between w-full items-center">
+				<p className="text-xl text-white font-semibold">{props.price}vnđ </p>
+				<div className="text-slate-800 font-bold">Freeship</div>
+			</div>
+		</div>
+	);
 }

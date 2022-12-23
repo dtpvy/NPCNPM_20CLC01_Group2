@@ -1,12 +1,13 @@
 import React from "react";
-import Category from "./Category/Category.jsx";
-import Suggestion from "./Suggestion/Suggestion.jsx";
+
+import Category from "./Category";
+import Suggestion from "./Suggestion";
 
 export default function Home() {
-  return (
-    <div>
-      <Category />
-      <Suggestion />
-    </div>
-  );
+	return (
+		<div>
+			<Category />
+			<Suggestion />
+		</div>
+	);
 }
