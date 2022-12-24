@@ -14,17 +14,17 @@ const Template = ({ children }) => {
 		<div>
 			<div className="flex flex-col gap-10">
 				<div className="grid grid-cols-3">
-					<div className="bg-gray-100 p-5 mr-5 rounded-md">
+					<div className="bg-white p-5 mr-5">
 						<div className="font-bold text-2xl">Cái Minh Chánh</div>
 						<div className="text-slate-400">Sửa hồ sơ</div>
 					</div>
-					<div className="bg-gray-100 col-span-2 p-5 rounded-md">
+					<div className="bg-white col-span-2 p-5">
 						<div className="font-semibold text-2xl">Hồ sơ của tôi</div>
 						<div className="text-slate-400">Quản lý thông tin hồ sơ để bảo mật tài khoản</div>
 					</div>
 				</div>
-				<div className="grid grid-cols-3 divide-x">
-					<div className="flex flex-col divide-y mr-5">
+				<div className="grid grid-cols-3 divide-x divide-slate-400">
+					<div className="flex flex-col divide-y divide-slate-400 mr-5">
 						{buttons.map((button) => {
 							return (
 								<div

@@ -24,7 +24,7 @@ export default function Suggestion(props) {
 	return (
 		<div className="">
 			<h3 className="text-3xl font-semibold mb-3">Gợi ý hôm nay</h3>
-			<div className="grid grid-cols-5 gap-5 bg-white p-6">{Suggestions}</div>
+			<div className="grid grid-cols-5 gap-5 bg-white">{Suggestions}</div>
 		</div>
 	);
 }

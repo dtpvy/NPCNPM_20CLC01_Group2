@@ -11,7 +11,7 @@ const Layout = () => {
 					<Outlet />
 				</div>
 			</div>
-			<footer className="w-screen h-20 bg-blue-500"></footer>
+			<footer className="h-20 bg-blue-500"></footer>
 		</>
 	);
 };

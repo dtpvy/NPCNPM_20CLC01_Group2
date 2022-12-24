@@ -2,7 +2,7 @@ import React from "react";
 import avatar from "./avatar.png";
 
 export default function Header() {
-	let category = [
+	const category = [
 		"trái cây",
 		"thịt trứng",
 		"rau củ quả",
@@ -12,7 +12,9 @@ export default function Header() {
 	];
 	const categoryElements = category.map((thing, index) => {
 		return (
-			<div key={index} className="text-sm cursor-pointer hover:underline text-center">
+			<div
+				key={index}
+				className="text-sm cursor-pointer hover:underline hover:scale-105 hover:underline-offset-4 text-center">
 				{thing}
 			</div>
 		);

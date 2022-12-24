@@ -41,7 +41,7 @@ export default function Profile() {
 					</div>
 				</div>
 				<div className="flex flex-col justify-center items-center gap-y-2">
-					<div className="w-48 aspect-square p-2 bg-slate-200 rounded-full flex items-center justify-center">
+					<div className="w-48 aspect-square p-2 bg-slate-400 rounded-full flex items-center justify-center">
 						<img className="w-full" src={avatar} alt="" />
 					</div>
 					<div className="w-48 mt-4 h-0.5 bg-green-200"></div>

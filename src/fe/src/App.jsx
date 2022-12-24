@@ -14,9 +14,10 @@ import Register from "./Components/Register";
 import Profile from "./Components/Profile/Profile";
 import Bought from "./Components/Profile/Bought";
 import EditProfile from "./Components/Profile/EditProfile";
+import Payment from "./Components/Payment";
+
 import { useEffect } from "react";
 // import { loginAPI } from "./Services/account.js";
-import Payment from "./Components/Payment";
 
 const App = () => {
 	// useEffect(() => {
@@ -35,7 +36,7 @@ const App = () => {
 					<Route path="seller-profile" element={<SellerProfile />} /> {/*fixed*/}
 				</Route>
 				<Route path="detail/:id" element={<ProductDetail />} /> {/*fixed*/}
-				<Route path="bought" element={<Bought />} />
+				<Route path="bought" element={<Bought />} /> {/*fixed*/}
 				<Route path="order" element={<Order />} />
 				<Route path="cart-detail" element={<Cart />} />
 				<Route path="payment" element={<Payment />} />
