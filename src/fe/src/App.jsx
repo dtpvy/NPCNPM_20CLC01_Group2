@@ -38,9 +38,9 @@ const App = () => {
 				<Route path="detail/:id" element={<ProductDetail />} /> {/*fixed*/}
 				<Route path="bought" element={<Bought />} /> {/*fixed*/}
 				<Route path="order" element={<Order />} /> {/*fixed*/}
-				<Route path="cart" element={<Cart />} />
-				<Route path="payment" element={<Payment />} />
-				<Route path="support" element={<Support />} />
+				<Route path="cart" element={<Cart />} /> {/*fixed*/}
+				<Route path="payment" element={<Payment />} /> {/*fixed*/}
+				<Route path="support" element={<Support />} /> {/*fixed*/}
 			</Route>
 		</Routes>
 	);
