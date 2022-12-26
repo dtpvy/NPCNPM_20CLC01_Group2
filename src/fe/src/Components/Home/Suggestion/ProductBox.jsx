@@ -13,7 +13,7 @@ export default function ProductBox(props) {
 			<p className="font-semibold text-2xl">{props.product}</p>
 			<div className="w-full h-0.5 bg-slate-300"></div>
 			<div className="flex justify-between w-full items-center">
-				<p className="text-xl text-white font-semibold">{props.price}vnđ </p>
+				<p className="text-xl text-white font-semibold">{props.price} vnđ </p>
 				<div className="text-slate-800 font-bold">Freeship</div>
 			</div>
 		</div>

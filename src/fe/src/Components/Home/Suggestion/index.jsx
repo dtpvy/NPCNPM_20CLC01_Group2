@@ -1,22 +1,12 @@
 import React from "react";
+import { useSelector } from "react-redux";
+import { getProductsSuggestionQuery } from "../../../app/slice/productsSlice";
+
 import ProductBox from "./ProductBox";
 
-const suggestions = [
-	{ name: "Quần áo 1", price: "200.0" },
-	{ name: "Điện thoại 1", price: "2000.0" },
-	{ name: "Thiết bị điện tử 1", price: "200.0" },
-	{ name: "iphone 1", price: "200.0" },
-	{ name: "mũ 1", price: "200.0" },
-	{ name: "Sách 1", price: "200.0" },
-	{ name: "áo 1", price: "200.0" },
-	{ name: "Thiết bị điện tử 1", price: "200.0" },
-	{ name: "iphone 1", price: "200.0" },
-	{ name: "mũ 1", price: "200.0" },
-	{ name: "Sách 1", price: "200.0" },
-	{ name: "áo 1", price: "200.0" },
-];
-
 export default function Suggestion(props) {
+	const suggestions = useSelector(getProductsSuggestionQuery);
+
 	const Suggestions = suggestions.map((thing, index) => {
 		return <ProductBox key={index} product={thing.name} price={thing.price} />;
 	});

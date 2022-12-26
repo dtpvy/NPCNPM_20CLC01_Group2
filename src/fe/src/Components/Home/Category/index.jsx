@@ -1,22 +1,12 @@
 import React from "react";
+import { useSelector } from "react-redux";
+import { getAllCollectionsQuery } from "../../../app/slice/collectionsSlice";
+
 import CategoryBox from "./CategoryBox";
 
-const categories = [
-	{ name: "Quần áo 1", price: "200.0" },
-	{ name: "Điện thoại 1", price: "2000.0" },
-	{ name: "Thiết bị điện tử 1", price: "200.0" },
-	{ name: "iphone 1", price: "200.0" },
-	{ name: "mũ 1", price: "200.0" },
-	{ name: "Sách 1", price: "200.0" },
-	{ name: "áo 1", price: "200.0" },
-	{ name: "Thiết bị điện tử 1", price: "200.0" },
-	{ name: "iphone 1", price: "200.0" },
-	{ name: "mũ 1", price: "200.0" },
-	{ name: "Sách 1", price: "200.0" },
-	{ name: "áo 1", price: "200.0" },
-];
-
 export default function Category(props) {
+	const categories = useSelector(getAllCollectionsQuery);
+
 	const Categories = categories.map((thing, index) => {
 		return <CategoryBox key={index} product={thing.name} />;
 	});
