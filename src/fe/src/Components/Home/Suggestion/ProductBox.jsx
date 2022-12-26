@@ -1,9 +1,16 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+
 import img from "./hat.jpg";
 
 export default function ProductBox(props) {
+	const navigate = useNavigate();
 	return (
-		<div className="relative bg-blue-300 p-2 pb-4 flex flex-col items-start gap-2 rounded-sm w-full cursor-pointer hover:scale-105 duration-300 hover:shadow-2xl">
+		<div
+			className="relative bg-blue-300 p-2 pb-4 flex flex-col items-start gap-2 rounded-sm w-full cursor-pointer hover:scale-105 duration-300 hover:shadow-2xl"
+			onClick={() => {
+				navigate(`/detail/${props.id}`);
+			}}>
 			<img className="w-full rounded-md mb-3 border-2 border-slate-300" src={img} alt="" />
 
 			<div className="absolute text-sm text-red-500 top-4 right-4">QC</div>

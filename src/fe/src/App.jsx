@@ -28,19 +28,20 @@ const App = () => {
 
 	return (
 		<Routes>
+			{/*semi-fixed*/}
 			<Route path="/" element={<Layout />}>
-				<Route index element={<Home />} /> {/*fixed*/}
+				<Route index element={<Home />} /> {/*semi-fixed*/}
 				<Route path="profile">
 					<Route index element={<Profile />} /> {/*fixed*/}
 					<Route path="edit" element={<EditProfile />} /> {/*fixed*/}
-					<Route path="seller-profile" element={<SellerProfile />} /> {/*fixed*/}
+					<Route path="seller-profile" element={<SellerProfile />} /> {/*semi-fixed*/}
 				</Route>
 				<Route path="detail/:id" element={<ProductDetail />} /> {/*fixed*/}
-				<Route path="bought" element={<Bought />} /> {/*fixed*/}
-				<Route path="order" element={<Order />} /> {/*fixed*/}
-				<Route path="cart" element={<Cart />} /> {/*fixed*/}
-				<Route path="payment" element={<Payment />} /> {/*fixed*/}
-				<Route path="support" element={<Support />} /> {/*fixed*/}
+				<Route path="bought" element={<Bought />} /> {/*???*/}
+				<Route path="order" element={<Order />} />
+				<Route path="cart" element={<Cart />} /> {/*semi-fixed*/}
+				<Route path="payment" element={<Payment />} /> {/*semi-fixed*/}
+				<Route path="support" element={<Support />} /> {/*semi-fixed*/}
 			</Route>
 		</Routes>
 	);

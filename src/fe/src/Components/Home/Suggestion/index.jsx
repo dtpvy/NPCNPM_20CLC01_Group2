@@ -8,7 +8,7 @@ export default function Suggestion(props) {
 	const suggestions = useSelector(getProductsSuggestionQuery);
 
 	const Suggestions = suggestions.map((thing, index) => {
-		return <ProductBox key={index} product={thing.name} price={thing.price} />;
+		return <ProductBox key={index} id={thing.id} product={thing.name} price={thing.price} />;
 	});
 
 	return (

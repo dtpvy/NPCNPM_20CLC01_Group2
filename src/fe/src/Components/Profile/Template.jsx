@@ -1,15 +1,20 @@
 import React from "react";
-import account from "./account.png";
+
+import { useNavigate } from "react-router-dom";
+
+import store from "./account.png";
 import bill from "./bill.png";
 import support from "./sp.png";
 
 const buttons = [
-	{ image: account, text: "Tài khoản của tôi" },
-	{ image: bill, text: "Đơn hàng đã mua" },
-	{ image: support, text: "Yêu cầu hỗ trợ" },
+	{ image: store, text: "Cửa hàng của tôi", path: "/profile/seller-profile" },
+	{ image: bill, text: "Đơn hàng đã mua", path: "/bought" },
+	{ image: support, text: "Yêu cầu hỗ trợ", path: "/support" },
 ];
 
 const Template = ({ children }) => {
+	const navigate = useNavigate();
+
 	return (
 		<div>
 			<div className="flex flex-col gap-10">
@@ -28,6 +33,9 @@ const Template = ({ children }) => {
 						{buttons.map((button) => {
 							return (
 								<div
+									onClick={() => {
+										navigate(button.path);
+									}}
 									key={button.text}
 									className="flex items-end gap-x-2 hover:bg-slate-100 py-3 pl-3 hover:font-semibold cursor-pointer">
 									<img className="w-12 aspect-square" src={button.image} alt="" />

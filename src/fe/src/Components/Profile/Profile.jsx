@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 import avatar from "./avatar.png";
 import Template from "./Template";
@@ -13,6 +14,8 @@ const data = [
 ];
 
 export default function Profile() {
+	const navigate = useNavigate();
+
 	return (
 		<div>
 			<Template>
@@ -36,7 +39,11 @@ export default function Profile() {
 						</div>
 					</div>
 
-					<div className="bg-sky-600 px-6 py-1 rounded-md text-white cursor-pointer inline-block hover:bg-sky-800 hover:scale-105 duration-300">
+					<div
+						className="bg-sky-600 px-6 py-1 rounded-md text-white cursor-pointer inline-block hover:bg-sky-800 hover:scale-105 duration-300"
+						onClick={() => {
+							navigate("edit");
+						}}>
 						Sửa
 					</div>
 				</div>

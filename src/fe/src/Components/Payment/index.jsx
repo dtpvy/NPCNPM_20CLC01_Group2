@@ -1,9 +1,10 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Modal = ({ background, toggler }) => {
 	return (
 		<div
-			className="w-[calc(60vw)] h-[calc(100vh-12rem)] cursor-pointer relative m-auto hover:scale-110 duration-500"
+			className="w-[calc(60vw)] h-[calc(75vh)] cursor-pointer relative m-auto hover:scale-110 duration-500"
 			onClick={() => {
 				toggler(false);
 			}}>
@@ -14,6 +15,8 @@ const Modal = ({ background, toggler }) => {
 };
 
 const Payment = () => {
+	const navigate = useNavigate();
+
 	const [showModal, setShowModal] = useState(false);
 	const [modalIndex, setModalIndex] = useState(0);
 	const modals = [
@@ -22,11 +25,11 @@ const Payment = () => {
 	];
 
 	return (
-		<div className="w-full px-10 py-24">
+		<div className="w-full">
 			{showModal === true ? (
 				modals[modalIndex]
 			) : (
-				<div className="w-full p-4 border-4 border-cyan-300 rounded-sm">
+				<div className="w-full p-4 border-4 border-sky-600 rounded-sm">
 					<div className="w-full grid grid-cols-[4fr_2fr_1fr_1fr_2fr] gap-y-5 gap-x-5">
 						<h1 className="text-4xl font-semibold col-start-1 col-span-2">Sản phẩm</h1>
 						<div className="text-slate-400">Đơn giá</div>
@@ -71,7 +74,11 @@ const Payment = () => {
 							<div className="w-1/5 h-1 bg-slate-200 mt-4 mb-2 rounded-lg"></div>
 						</div>
 						<div className="col-span-5 flex justify-end">
-							<div className="px-4 py-2 bg-blue-500 text-white rounded-md cursor-pointer hover:scale-110 duration-300">
+							<div
+								className="px-4 py-2 bg-sky-600 text-white rounded-md cursor-pointer hover:scale-110 hover:bg-sky-800 duration-300"
+								onClick={() => {
+									navigate("/order");
+								}}>
 								Thanh toán
 							</div>
 						</div>

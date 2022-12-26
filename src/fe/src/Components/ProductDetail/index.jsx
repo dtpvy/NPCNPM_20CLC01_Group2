@@ -1,8 +1,12 @@
 import React, { useState } from "react";
+
+import { useNavigate } from "react-router-dom";
+
 import logo from "../../assets/logotest.svg";
 import productImg from "../../assets/producttest.jpg";
 
 const ProductDetail = () => {
+	const navigate = useNavigate();
 	const [amount, setAmount] = useState(1);
 
 	return (
@@ -47,7 +51,11 @@ const ProductDetail = () => {
 							</div>
 						</div>
 					</div>
-					<button className="mx-2 bg-red-500 px-5 py-2 rounded-md w-36 text-white hover:bg-red-400 hover:scale-110 duration-300">
+					<button
+						className="mx-2 bg-red-500 px-5 py-2 rounded-md w-36 text-white hover:bg-red-400 hover:scale-110 duration-300"
+						onClick={() => {
+							navigate("/");
+						}}>
 						Mua ngay
 					</button>
 				</div>
@@ -65,7 +73,11 @@ const ProductDetail = () => {
 								<div className="h-full flex items-center">⭐</div>
 								<div className="text-md flex items-center text-slate-400">(1.2k +)</div>
 							</div>
-							<button className="border-blue-500 text-blue-500 border-2 w-full py-1 rounded-lg font-bold hover:bg-blue-300 hover:scale-105 duration-300">
+							<button
+								className="border-blue-500 text-blue-500 border-2 w-full py-1 rounded-lg font-bold hover:bg-blue-300 hover:scale-105 duration-300"
+								onClick={() => {
+									navigate("/profile/seller-profile");
+								}}>
 								Xem shop
 							</button>
 						</div>

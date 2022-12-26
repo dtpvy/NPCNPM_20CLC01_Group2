@@ -1,11 +1,8 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-// import TrashIMG from "../../components/Images/trash.svg";
-// import houseIMG from "../../components/Images/houseIMG.png";
 import product_1 from "../../components/Images/product-1.png";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faArrowAltCircleLeft } from "@fortawesome/free-solid-svg-icons";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
 const ProductRow = () => {
@@ -67,6 +64,8 @@ const ProductRow = () => {
 };
 
 const Order = () => {
+	const navigate = useNavigate();
+
 	return (
 		<div>
 			<div className="container mx-auto mt-10">
@@ -116,7 +115,11 @@ const Order = () => {
 								</div>
 							</div>
 
-							<button className="bg-indigo-500 font-semibold hover:bg-indigo-800 hover:scale-105 duration-300 py-3 text-white rounded-md">
+							<button
+								className="bg-indigo-500 font-semibold hover:bg-indigo-800 hover:scale-105 duration-300 py-3 text-white rounded-md"
+								onClick={() => {
+									navigate("/payment");
+								}}>
 								Mua hàng
 							</button>
 						</div>

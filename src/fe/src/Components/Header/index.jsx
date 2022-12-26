@@ -1,7 +1,10 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+
 import avatar from "./avatar.png";
 
 export default function Header() {
+	const navigate = useNavigate();
 	const category = [
 		"trái cây",
 		"thịt trứng",
@@ -10,6 +13,7 @@ export default function Header() {
 		"hải sản",
 		"gạo, mì ăn liền",
 	];
+
 	const categoryElements = category.map((thing, index) => {
 		return (
 			<div
@@ -22,7 +26,11 @@ export default function Header() {
 
 	return (
 		<header className="bg-sky-600 flex items-center justify-center h-24">
-			<div className="text-white p-3 bg-red-300">
+			<div
+				className="text-white p-3 bg-red-300 cursor-pointer"
+				onClick={() => {
+					navigate("/");
+				}}>
 				<span>Webanhang</span>
 				<p>Logo</p>
 			</div>
@@ -41,7 +49,11 @@ export default function Header() {
 				</nav>
 			</div>
 			<div className="flex gap-4">
-				<div className="flex gap-2">
+				<div
+					className="flex gap-2  cursor-pointer"
+					onClick={() => {
+						navigate("/profile");
+					}}>
 					<div className="bg-white flex justify-center items-center rounded-full">
 						<img src={avatar} alt="" className="h-10 block" />
 					</div>
@@ -53,14 +65,15 @@ export default function Header() {
 					</div>
 				</div>
 
-				<a
-					href="#"
-					id="account"
-					className="block text-white bg-blue-600 p-2 rounded-md hover:scale-105 hover:bg-blue-800 duration-300">
+				<div
+					className="block text-white bg-blue-600 p-2 rounded-md hover:scale-105 hover:bg-blue-800 duration-300 cursor-pointer"
+					onClick={() => {
+						navigate("/cart");
+					}}>
 					<p className="max-md:hidden text-sm">
 						<i className="fa fa-shopping-cart text-lg"></i> Giỏ hàng
 					</p>
-				</a>
+				</div>
 			</div>
 		</header>
 	);
