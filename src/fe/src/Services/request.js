@@ -15,7 +15,6 @@ export default function request({ path, baseUrl, params, data, headers, method }
 				data,
 				headers: {
 					"Content-Type": "application/json",
-					"Access-Control-Allow-Origin": "*",
 					...(token && { "access-token": token }),
 					...headers,
 				},
@@ -28,3 +27,6 @@ export default function request({ path, baseUrl, params, data, headers, method }
 			});
 	});
 }
+
+
+// getCategory() => request => Promise => data_category = then.catch

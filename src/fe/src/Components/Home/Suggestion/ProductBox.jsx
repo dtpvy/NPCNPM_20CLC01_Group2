@@ -17,7 +17,7 @@ export default function ProductBox(props) {
 			{/* <a href="#" className="absolute bottom-6 left-3 lg:left-6">
 					<i className="fa fa-heart-o"></i>
 				</a> */}
-			<p className="font-semibold text-2xl">{props.product}</p>
+			<p className="font-semibold text-2xl">{props.title}</p>
 			<div className="w-full h-0.5 bg-slate-300"></div>
 			<div className="flex justify-between w-full items-center">
 				<p className="text-xl text-white font-semibold">{props.price} vnđ </p>

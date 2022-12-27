@@ -16,16 +16,9 @@ import Bought from "./Components/Profile/Bought";
 import EditProfile from "./Components/Profile/EditProfile";
 import Payment from "./Components/Payment";
 
-import { useEffect } from "react";
 // import { loginAPI } from "./Services/account.js";
 
 const App = () => {
-	// useEffect(() => {
-	// 	loginAPI({ email: "admin@gmail.com", password: "admin1" }).then((res) => {
-	// 		console.log(res);
-	// 	});
-	// }, []);
-
 	return (
 		<Routes>
 			{/*semi-fixed*/}

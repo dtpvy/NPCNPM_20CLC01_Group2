@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { getCategory } from "../../Services/category";
 
 const data = [
 	{ id: 1, name: "Quần áo 1", products: [] },
@@ -12,6 +13,8 @@ const data = [
 ];
 
 export const getCollections = createAsyncThunk("collections/getCollections", async () => {
+	const data = await getCategory();
+	console.log(data);
 	return data;
 });
 

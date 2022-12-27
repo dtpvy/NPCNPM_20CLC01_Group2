@@ -7,6 +7,9 @@ import store from "./app/store/store";
 
 import "./index.css";
 import App from "./App";
+import { getUser } from "./app/slice/userSlice";
+
+store.dispatch(getUser());
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

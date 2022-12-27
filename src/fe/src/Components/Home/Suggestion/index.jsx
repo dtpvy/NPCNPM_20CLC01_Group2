@@ -1,14 +1,14 @@
 import React from "react";
-import { useSelector } from "react-redux";
-import { getProductsSuggestionQuery } from "../../../app/slice/productsSlice";
+
+import { getAllProduct } from "../../../Services/product";
 
 import ProductBox from "./ProductBox";
 
-export default function Suggestion(props) {
-	const suggestions = useSelector(getProductsSuggestionQuery);
+export default function Suggestion() {
+	const suggestions = getAllProduct();
 
 	const Suggestions = suggestions.map((thing, index) => {
-		return <ProductBox key={index} id={thing.id} product={thing.name} price={thing.price} />;
+		return <ProductBox key={index} id={thing.id} title={thing.title} price={thing.price} />;
 	});
 
 	return (

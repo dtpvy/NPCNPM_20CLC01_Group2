@@ -1,19 +1,22 @@
-import React from "react";
+import React, { useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { getUserQuery } from "../../app/slice/userSlice";
 
 import avatar from "./avatar.png";
 import Template from "./Template";
 
 const data = [
-	{ name: "Tên đăng nhập", value: "Caiminhchanh" },
-	{ name: "Tên người dùng", value: "MinhChanh" },
-	{ name: "Email", value: "cm********@yahoo.com" },
-	{ name: "Số điện thoại", value: "*********36" },
-	{ name: "Giới tính", value: "Nam" },
-	{ name: "Ngày sinh", value: "28/03/2002" },
+	{ key: "username", label: "Tên đăng nhập" },
+	{ key: "fullname", label: "Tên người dùng" },
+	{ key: "email", label: "Email" },
+	{ key: "phone", label: "Số điện thoại" },
+	{ key: "gender", label: "Giới tính" },
+	{ key: "dateOfBirth", label: "Ngày sinh" },
 ];
 
 export default function Profile() {
+	const user = useSelector(getUserQuery);
 	const navigate = useNavigate();
 
 	return (
@@ -25,15 +28,18 @@ export default function Profile() {
 							<div className="flex flex-col gap-4">
 								{data.map((field) => {
 									return (
-										<div key={field.name} className="text-slate-500">
-											{field.name}:
+										<div key={field.key} className="text-slate-500">
+											{field.label}:
 										</div>
 									);
 								})}
 							</div>
 							<div className="flex flex-col gap-4">
 								{data.map((field) => {
-									return <div key={field.name + "_value"}>{field.value}</div>;
+									if (field.key !== "dateOfBirth")
+										return <div key={field.label}>{user[field.key]}</div>;
+									const [year, month, day] = user["dateOfBirth"].split("-");
+									return <div key={"Ngày sinh"}>{`${day}/${month}/${year}`}</div>;
 								})}
 							</div>
 						</div>
@@ -55,10 +61,21 @@ export default function Profile() {
 					{/* <div className="bg-sky-600 px-6 py-1 rounded-md text-white cursor-pointer inline-block hover:bg-sky-800 hover:scale-105 duration-300">
 						Chọn ảnh
 					</div> */}
-					<div className="flex flex-row text-slate-400">Gia nhập 123 ngày trước</div>
+					<div className="flex flex-row text-slate-400">
+						Gia nhập {dateDiff(user.dateCreated)} ngày trước
+					</div>
 					<div className="flex flex-row text-slate-400"></div>
 				</div>
 			</Template>
 		</div>
 	);
 }
+
+const dateDiff = (start, end) => {
+	if (!end) {
+		end = new Date();
+	}
+	const t1 = Date.parse(start);
+	const t2 = Date.parse(end);
+	return Math.floor((t2 - t1) / (24 * 3600 * 1000));
+};

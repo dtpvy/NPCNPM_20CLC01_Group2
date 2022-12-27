@@ -1,6 +1,8 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import { useNavigate } from "react-router-dom";
+import { getUserQuery, updateUser } from "../../app/slice/userSlice";
 
 import avatar from "./avatar.png";
 import Template from "./Template";
@@ -15,18 +17,23 @@ const data = [
 ];
 
 export default function EditProfile() {
+	const user = useSelector(getUserQuery);
+	const dob = useMemo(() => {
+		return user["dateOfBirth"].split("-");
+	}, [user]);
+
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
 
 	const usernameRef = useRef();
 	const fullnameRef = useRef();
 	const emailRef = useRef();
 	const phoneRef = useRef();
 
-	const [gender, setGender] = useState(data[4].value);
-	const dob = data[5].value.split("/");
-	const [day, setDay] = useState(dob[0]);
+	const [gender, setGender] = useState(user["gender"]);
+	const [day, setDay] = useState(dob[2]);
 	const [month, setMonth] = useState(dob[1]);
-	const [year, setYear] = useState(dob[2]);
+	const [year, setYear] = useState(dob[0]);
 
 	const [selectedFile, setSelectedFile] = useState(null);
 
@@ -37,15 +44,16 @@ export default function EditProfile() {
 					className="px-5"
 					onSubmit={(e) => {
 						e.preventDefault();
-						console.log({
+						const data = {
 							username: usernameRef.current.value,
 							fullname: fullnameRef.current.value,
 							email: emailRef.current.value,
 							phone: phoneRef.current.value,
 							gender: gender,
-							dayOfBirth: `${day}/${month}/${year}`,
-						});
-
+							dateOfBirth: `${year}-${month}-${day}`,
+						};
+						console.log(data);
+						dispatch(updateUser(data));
 						navigate("/profile");
 					}}>
 					<div className="grid grid-cols-[1.5fr_3fr] mb-5">
@@ -62,25 +70,25 @@ export default function EditProfile() {
 							<input
 								ref={usernameRef}
 								name="username"
-								defaultValue={data[0].value}
+								defaultValue={user["username"]}
 								className="w-full border-2 border-slate-300 px-2 py-1"
 							/>
 							<input
 								ref={fullnameRef}
 								name="fullname"
-								defaultValue={data[1].value}
+								defaultValue={user["fullname"]}
 								className="w-full border-2 border-slate-300 px-2 py-1"
 							/>
 							<input
 								ref={emailRef}
 								name="email"
-								defaultValue={data[2].value}
+								defaultValue={user["email"]}
 								className="w-full border-2 border-slate-300 px-2 py-1"
 							/>
 							<input
 								ref={phoneRef}
 								name="phone"
-								defaultValue={data[3].value}
+								defaultValue={user["phone"]}
 								className="w-full border-2 border-slate-300 px-2 py-1"
 							/>
 							<div className="flex gap-4 w-full border-2 border-transparent py-1">

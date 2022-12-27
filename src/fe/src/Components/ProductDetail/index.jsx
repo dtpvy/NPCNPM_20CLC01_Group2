@@ -1,11 +1,15 @@
 import React, { useState } from "react";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import logo from "../../assets/logotest.svg";
 import productImg from "../../assets/producttest.jpg";
+import { getProductById } from "../../Services/product";
 
 const ProductDetail = () => {
+	const { id } = useParams();
+	const data = getProductById(id);
+
 	const navigate = useNavigate();
 	const [amount, setAmount] = useState(1);
 
@@ -17,10 +21,10 @@ const ProductDetail = () => {
 			<div className="bg-white p-5 shadow-lg rounded-sm grid grid-cols-2 divide-x-2">
 				<div className="flex flex-col justify-between h-full w-full pr-5">
 					<div className="flex flex-col gap-y-5">
-						<h2 className="mx-2 text-3xl font-bold">Quần Jean Khá Bảnh</h2>
-						<div className="text-white-400 mx-2">Đã bán: 51</div>
+						<h2 className="mx-2 text-3xl font-bold">{data.title}</h2>
+						<div className="text-white-400 mx-2">Đã bán: {data.sold}</div>
 						<div className="bg-slate-300 rounded-md mx-2 px-4 py-2 w-fit">
-							<span className="text-red-500 text-3xl font-bold">10.000.000đ</span>
+							<span className="text-red-500 text-3xl font-bold">{data.price} vnđ</span>
 						</div>
 						<div className="mx-2">
 							<div className="mb-3">Giao đến:</div>
