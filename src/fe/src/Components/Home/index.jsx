@@ -1,12 +1,16 @@
 import React from "react";
-import Category from "./Category/Category.jsx";
-import Suggestion from "./Suggestion/Suggestion.jsx";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { getCollections } from "../../app/slice/collectionsSlice";
+
+import Category from "./Category";
+import Suggestion from "./Suggestion";
 
 export default function Home() {
-  return (
-    <div>
-      <Category />
-      <Suggestion />
-    </div>
-  );
+	return (
+		<div className="flex flex-col gap-14">
+			<Category />
+			<Suggestion />
+		</div>
+	);
 }

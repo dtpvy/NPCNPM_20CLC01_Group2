@@ -1,33 +1,37 @@
 import React, { useState } from "react";
+
+import { useNavigate, useParams } from "react-router-dom";
+
 import logo from "../../assets/logotest.svg";
 import productImg from "../../assets/producttest.jpg";
+import { getProductById } from "../../Services/product";
 
 const ProductDetail = () => {
+	const { id } = useParams();
+	const data = getProductById(id);
+
+	const navigate = useNavigate();
 	const [amount, setAmount] = useState(1);
 
 	return (
-		<div className="p-10 h-full w-full flex gap-x-3">
-			<div className="bg-inherit w-2/5 rounded-md">
-				<img
-					src={productImg}
-					alt="cannot load"
-					className="w-full h-full object-contain rounded-md"
-				/>
+		<div className="grid grid-cols-[1fr_2fr] gap-x-3">
+			<div className="bg-slate-200 p-1">
+				<img src={productImg} alt="cannot load" className="w-full h-full object-contain" />
 			</div>
-			<div className="bg-white w-3/5 p-5 shadow-md rounded-md grid grid-cols-2 divide-x-2">
+			<div className="bg-white p-5 shadow-lg rounded-sm grid grid-cols-2 divide-x-2">
 				<div className="flex flex-col justify-between h-full w-full pr-5">
 					<div className="flex flex-col gap-y-5">
-						<h2 className="mx-2 text-3xl font-bold">Quần Jean Khá Bảnh</h2>
-						<div className="text-white-400 mx-2">Đã bán: 51</div>
-						<div className="bg-slate-100 rounded-md mx-2 px-4 py-2 w-fit">
-							<span className="text-red-500 text-3xl font-bold">10.000.000đ</span>
+						<h2 className="mx-2 text-3xl font-bold">{data.title}</h2>
+						<div className="text-white-400 mx-2">Đã bán: {data.sold}</div>
+						<div className="bg-slate-300 rounded-md mx-2 px-4 py-2 w-fit">
+							<span className="text-red-500 text-3xl font-bold">{data.price} vnđ</span>
 						</div>
 						<div className="mx-2">
 							<div className="mb-3">Giao đến:</div>
 							<div>Q.7, Phú Thuận, Tp.HCM</div>
 						</div>
 						<div className="mx-2">
-							<div className="mb-3">Số lượng</div>
+							<div className="mb-3">Số lượng:</div>
 							<div className="flex">
 								<div
 									className="border-2 aspect-square border-slate-400 flex justify-center items-center px-3 text-3xl hover:bg-slate-200 cursor-pointer select-none rounded-l-md"
@@ -39,6 +43,7 @@ const ProductDetail = () => {
 								<input
 									value={amount}
 									className="border-2 w-16 border-x-0 border-slate-400 flex justify-center items-center text-center"
+									onChange={() => {}}
 								/>
 								<div
 									className="border-2 border-slate-400 flex justify-center items-center px-3 text-3xl hover:bg-slate-200 cursor-pointer select-none rounded-r-md"
@@ -50,7 +55,11 @@ const ProductDetail = () => {
 							</div>
 						</div>
 					</div>
-					<button className="mx-2 bg-red-500 px-5 py-2 rounded-md w-36 text-white hover:bg-red-400 hover:scale-110 duration-300">
+					<button
+						className="mx-2 bg-red-500 px-5 py-2 rounded-md w-36 text-white hover:bg-red-400 hover:scale-110 duration-300"
+						onClick={() => {
+							navigate("/");
+						}}>
 						Mua ngay
 					</button>
 				</div>
@@ -68,7 +77,11 @@ const ProductDetail = () => {
 								<div className="h-full flex items-center">⭐</div>
 								<div className="text-md flex items-center text-slate-400">(1.2k +)</div>
 							</div>
-							<button className="border-blue-500 text-blue-500 border-2 w-full py-1 rounded-lg font-bold hover:bg-blue-300 hover:scale-105 duration-300">
+							<button
+								className="border-blue-500 text-blue-500 border-2 w-full py-1 rounded-lg font-bold hover:bg-blue-300 hover:scale-105 duration-300"
+								onClick={() => {
+									navigate("/profile/seller-profile");
+								}}>
 								Xem shop
 							</button>
 						</div>
