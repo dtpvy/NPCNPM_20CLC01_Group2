@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	db "main/database"
 	md "main/models"
 	"main/presenters"
@@ -50,6 +51,7 @@ func UpdateUserInfo(w http.ResponseWriter, r *http.Request, _ httprouter.Params)
 
 func GetUserOrders(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	userId := r.Context().Value("user_id")
+	fmt.Println()
 	_db := db.Connect()
 	var orders []md.Order
 	_db.Preload(clause.Associations).Preload("OrderPackages.Seller").Preload("OrderPackages.OrderItems").Find(&orders)
@@ -63,7 +65,7 @@ func GetUserOrders(w http.ResponseWriter, r *http.Request, _ httprouter.Params) 
 			}
 		}
 	}
-	_db.Preload("User").Preload("OrderDetails").Preload("OrderDetails.OrderItem").Preload("OrderDetails.OrderItem.Product").Where("user_id = ?", userId).First(&orders)
+
 	var response = presenters.BuildResponse(orders)
 	json.NewEncoder(w).Encode(response)
 }
