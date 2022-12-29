@@ -1,4 +1,4 @@
-package md
+package presenters
 
 type Store struct {
 	User       User         `json:"user"`

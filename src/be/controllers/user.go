@@ -4,18 +4,20 @@ import (
 	"encoding/json"
 	db "main/database"
 	md "main/models"
+	"main/presenters"
 	"net/http"
 
 	"github.com/julienschmidt/httprouter"
+	"gorm.io/gorm/clause"
 )
 
 func GetUserInfo(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	userId := r.Context().Value("user_id")
 	_db := db.Connect()
-	var user User
+	var user presenters.User
 
 	_db.Where("id = ?", userId).First(&user)
-	var response = md.BuildResponse(user)
+	var response = presenters.BuildResponse(user)
 	json.NewEncoder(w).Encode(response)
 }
 
@@ -25,33 +27,43 @@ func UpdateUserInfo(w http.ResponseWriter, r *http.Request, _ httprouter.Params)
 	json.NewDecoder(r.Body).Decode(&user)
 	_db := db.Connect()
 	if user["seller_name"] != nil {
-		var users []User
+		var users []md.User
 		_db.Where("seller_name = ? and id <> ?", user["seller_name"], userId).Find(&users)
 		if len(users) > 0 {
-			var response = md.BuildMessageResponse("Seller name is exist")
+			var response = presenters.BuildMessageResponse("Seller name is exist")
 			json.NewEncoder(w).Encode(response)
 			return
 		}
 		_db.Model(md.User{}).Where("id = ?", userId).Updates(user)
-		var collections []Collection
+		var collections []md.Collection
 		_db.Where("seller_id = ?", userId).Find(&collections)
 		if len(collections) == 0 {
-			collection := Collection{Name: "Tất cả", Image: "", SellerId: userId.(string)}
+			collection := md.Collection{Name: "Tất cả", Image: "", SellerId: userId.(string)}
 			_db.Create(&collection)
 		}
 	} else {
 		_db.Model(md.User{}).Where("id = ?", userId).Updates(user)
 	}
-	var response = md.BuildMessageResponse("Update user information successfully")
+	var response = presenters.BuildMessageResponse("Update user information successfully")
 	json.NewEncoder(w).Encode(response)
 }
 
 func GetUserOrders(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	userId := r.Context().Value("user_id")
 	_db := db.Connect()
-	var user User
-
-	_db.Where("id = ?", userId).First(&user)
-	var response = md.BuildResponse(user)
+	var orders []md.Order
+	_db.Preload(clause.Associations).Preload("OrderPackages.Seller").Preload("OrderPackages.OrderItems").Find(&orders)
+	for _, order := range orders {
+		if userId != order.UserId {
+			for _, pk := range order.OrderPackages {
+				if pk.SellerId == userId {
+					order.OrderPackages = []md.OrderPackage{pk}
+					break
+				}
+			}
+		}
+	}
+	_db.Preload("User").Preload("OrderDetails").Preload("OrderDetails.OrderItem").Preload("OrderDetails.OrderItem.Product").Where("user_id = ?", userId).First(&orders)
+	var response = presenters.BuildResponse(orders)
 	json.NewEncoder(w).Encode(response)
 }

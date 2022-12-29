@@ -2,57 +2,22 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	db "main/database"
 	md "main/models"
+	"main/presenters"
+	uts "main/utils"
 	"net/http"
-	"time"
+	"strings"
 
-	"github.com/google/uuid"
+	"github.com/golang-jwt/jwt"
 	"github.com/julienschmidt/httprouter"
 	"golang.org/x/crypto/bcrypt"
-	"gorm.io/gorm"
 )
 
 type AuthResponse struct {
-	User        md.User `json:"user"`
-	AccessToken string  `json:"access_token"`
-}
-
-type User struct {
-	Id         string    `json:"id"`
-	Fullname   string    `json:"fullname"`
-	SellerName string    `json:"seller_name"`
-	Email      string    `json:"email"`
-	Image      string    `json:"image"`
-	Phone      string    `json:"phone"`
-	Address    string    `json:"address"`
-	Password   string    `json:"password"`
-	CreatedAt  time.Time `json:"created_at"`
-	UpdatedAt  time.Time `json:"updated_at"`
-}
-
-func (u *User) BeforeCreate(tx *gorm.DB) (err error) {
-	u.Id = uuid.New().String()
-	return
-}
-
-func HashPassword(password string) string {
-	bytes, _ := bcrypt.GenerateFromPassword([]byte(password), 14)
-	return string(bytes)
-}
-
-func MappingUserResponse(user User) md.User {
-	return md.User{
-		Id:         user.Id,
-		Email:      user.Email,
-		Image:      user.Image,
-		SellerName: user.SellerName,
-		Fullname:   user.Fullname,
-		Phone:      user.Phone,
-		Address:    user.Address,
-		CreatedAt:  user.CreatedAt,
-		UpdatedAt:  user.UpdatedAt,
-	}
+	User        presenters.User `json:"user"`
+	AccessToken string          `json:"access_token"`
 }
 
 func CheckPasswordHash(password, hash string) bool {
@@ -65,21 +30,41 @@ func Login(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	err := json.NewDecoder(r.Body).Decode(&payload)
 	db.CheckErr(err)
 	_db := db.Connect()
-	var user User
+	var user md.User
 
 	_db.Where("email = ?", payload["email"]).First(&user)
 
 	if CheckPasswordHash(payload["password"], user.Password) {
-		res := AuthResponse{User: MappingUserResponse(user), AccessToken: md.GenerateToken(user.Id)}
-		var response = md.BuildResponse(res)
+		res := AuthResponse{User: uts.MappingUserResponse(user), AccessToken: presenters.GenerateToken(user.Id)}
+		var response = presenters.BuildResponse(res)
 		json.NewEncoder(w).Encode(response)
 	} else {
 		w.WriteHeader(401)
-		var response = md.BuildErrorResponse("Account is invalid", nil)
+		var response = presenters.BuildErrorResponse("Account is invalid", nil)
 		json.NewEncoder(w).Encode(response)
 		return
 	}
-	db.Close(_db)
+}
+
+func LoginAdmin(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	payload := make(map[string]string)
+	err := json.NewDecoder(r.Body).Decode(&payload)
+	db.CheckErr(err)
+	_db := db.Connect()
+	var user md.User
+	defaultId := "4d94422a-5471-4828-a122-dcf2ad249e7a"
+	_db.Where("email = ?", payload["email"]).First(&user)
+	fmt.Println(user, defaultId)
+	if CheckPasswordHash(payload["password"], user.Password) && user.Id == defaultId {
+		res := AuthResponse{User: uts.MappingUserResponse(user), AccessToken: presenters.GenerateAdminToken(user.Id)}
+		var response = presenters.BuildResponse(res)
+		json.NewEncoder(w).Encode(response)
+	} else {
+		w.WriteHeader(401)
+		var response = presenters.BuildErrorResponse("Account is invalid", nil)
+		json.NewEncoder(w).Encode(response)
+		return
+	}
 }
 
 func Register(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -89,28 +74,53 @@ func Register(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	password, _ := payload["password"]
 	email, _ := payload["email"]
 	if password == "" || email == "" {
-		var response = md.BuildErrorResponse("Missing information", nil)
+		var response = presenters.BuildErrorResponse("Missing information", nil)
 		json.NewEncoder(w).Encode(response)
 	} else {
 		_db := db.Connect()
-		var users []User
+		var users []md.User
 		_db.Where("email = ?", email).Find(&users)
 		if len(users) > 0 {
 			w.WriteHeader(409)
-			var response = md.BuildErrorResponse("Email already exists", nil)
+			var response = presenters.BuildErrorResponse("Email already exists", nil)
 			json.NewEncoder(w).Encode(response)
 			return
 		}
-		user := User{Email: email, Password: HashPassword(password)}
+		user := md.User{Email: email, Password: uts.HashPassword(password)}
 		err := _db.Create(&user).Error
 		if err != nil {
 			w.WriteHeader(502)
-			var response = md.BuildErrorResponse("Server error", nil)
+			var response = presenters.BuildErrorResponse("Server error", nil)
 			json.NewEncoder(w).Encode(response)
 			return
 		}
-		var res = AuthResponse{User: MappingUserResponse(user), AccessToken: md.GenerateToken(user.Id)}
-		var response = md.BuildResponse(res)
+		var res = AuthResponse{User: uts.MappingUserResponse(user), AccessToken: presenters.GenerateToken(user.Id)}
+		var response = presenters.BuildResponse(res)
 		json.NewEncoder(w).Encode(response)
 	}
+}
+
+func RefreshToken(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	claims := &presenters.Claims{}
+	payload := make(map[string]string)
+	err := json.NewDecoder(r.Body).Decode(&payload)
+	tknStr := payload["access-token"]
+	tkn, err := jwt.ParseWithClaims(tknStr, claims, func(token *jwt.Token) (interface{}, error) {
+		return presenters.JwtKey, nil
+	})
+
+	if err != nil || !tkn.Valid {
+		if strings.Contains(err.Error(), "token is expired") {
+			payload["access-token"] = presenters.GenerateToken(claims.UserId)
+			var response = presenters.BuildResponse(payload)
+			json.NewEncoder(w).Encode(response)
+			return
+		}
+		w.WriteHeader(http.StatusUnauthorized)
+		var response = presenters.BuildMessageResponse("User authentication failed")
+		json.NewEncoder(w).Encode(response)
+		return
+	}
+	var response = presenters.BuildResponse(payload)
+	json.NewEncoder(w).Encode(response)
 }

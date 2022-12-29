@@ -4,41 +4,53 @@ import (
 	"encoding/json"
 	db "main/database"
 	md "main/models"
+	"main/presenters"
 	"net/http"
 
 	"github.com/julienschmidt/httprouter"
 )
 
-const ADMIN_ID = "4d94422a-5471-4828-a122-dcf2ad249e7a"
-
 func CreateCategory(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	userId := r.Context().Value("user_id")
 	payload := make(map[string]string)
 	json.NewDecoder(r.Body).Decode(&payload)
 	_db := db.Connect()
 	category := md.Category{Name: payload["name"], Image: payload["image"], Title: payload["title"]}
-	_db.Create(&category)
-	if userId != ADMIN_ID {
-		var response = md.BuildMessageResponse("Create collection failed")
+	err := _db.Create(&category).Error
+	if err != nil {
+		var response = presenters.BuildMessageResponse("Create collection failed")
 		json.NewEncoder(w).Encode(response)
 	} else {
-		var response = md.BuildMessageResponse("Create collection successfully")
+		var response = presenters.BuildMessageResponse("Create collection successfully")
 		json.NewEncoder(w).Encode(response)
 	}
 }
 
 func UpdateCategory(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	id := ps.ByName("id")
+	category := make(map[string]interface{})
+	json.NewDecoder(r.Body).Decode(&category)
 	_db := db.Connect()
-	var product md.ProductDetail
-	err := _db.Model(md.Product{}).Where("id = ?", id).First(&product).Error
+	var _product md.Product
+	_db.Where("id = ?", category["id"]).First(&_product)
+	err := _db.Model(md.Category{}).Where("id = ?", category["id"]).Updates(category).Error
 	if err != nil {
-		w.WriteHeader(502)
-		var response = md.BuildErrorResponse("Server error", nil)
+		var response = presenters.BuildMessageResponse("Update category failed")
 		json.NewEncoder(w).Encode(response)
 	} else {
-		_db.Table("users").Select("users.*").Joins("left join collections on collections.seller_id = users.id").Joins("left join collection_details on collections.id = collection_details.collection_id").Where("collection_details.product_id = ?", id).Order("collections.created_at asc").First(&product.User)
-		var response = md.BuildResponse(product)
+		var response = presenters.BuildMessageResponse("Update category successfully")
+		json.NewEncoder(w).Encode(response)
+	}
+}
+
+func DeleteCategory(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	id := ps.ByName("id")
+	_db := db.Connect()
+	err := _db.Where("id = ?", id).Delete(&md.Category{}).Error
+	if err != nil {
+		w.WriteHeader(502)
+		var response = presenters.BuildErrorResponse("Delete fail", nil)
+		json.NewEncoder(w).Encode(response)
+	} else {
+		var response = presenters.BuildMessageResponse("Delete successfully")
 		json.NewEncoder(w).Encode(response)
 	}
 }
@@ -47,6 +59,6 @@ func GetCategoryList(w http.ResponseWriter, r *http.Request, ps httprouter.Param
 	_db := db.Connect()
 	var categories []md.Category
 	_db.Find(&categories)
-	var response = md.BuildResponse(categories)
+	var response = presenters.BuildResponse(categories)
 	json.NewEncoder(w).Encode(response)
 }

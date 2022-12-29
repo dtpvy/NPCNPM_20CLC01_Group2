@@ -13,7 +13,9 @@ type Product struct {
 	Image       string    `json:"image"`
 	Quantity    int       `json:"quantity"`
 	CategoryId  string    `json:"category_id"`
+	Category    Category  `gorm:"foreignKey:CategoryId" json:"category,omitempty"`
 	CreatorId   string    `json:"creator_id"`
+	Creator     User      `gorm:"foreignKey:CreatorId" json:"creator,omitempty"`
 	Description string    `json:"description"`
 	Price       int       `json:"price"`
 	OldPrice    int       `json:"old_price"`
@@ -22,6 +24,8 @@ type Product struct {
 }
 
 func (u *Product) BeforeCreate(tx *gorm.DB) (err error) {
-	u.Id = uuid.New().String()
+	if u.Id == "" {
+		u.Id = uuid.New().String()
+	}
 	return
 }

@@ -29,7 +29,6 @@ func Connect() *gorm.DB {
 	if env == "dev" {
 		db, err := gorm.Open(postgres.Open(dev), &gorm.Config{})
 		CheckErr(err)
-
 		return db
 	} else {
 		db, err := gorm.Open(postgres.Open(prod), &gorm.Config{})

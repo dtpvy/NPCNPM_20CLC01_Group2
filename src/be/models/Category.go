@@ -8,10 +8,11 @@ import (
 )
 
 type Category struct {
-	Id        string    `json:"id"`
+	Id        string    `gorm:"primaryKey" json:"id"`
 	Name      string    `json:"name"`
 	Title     string    `json:"title"`
 	Image     string    `json:"image"`
+	Products  []Product `gorm:"foreignKey:CategoryId" json:"-"`
 	Status    string    `json:"status"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`

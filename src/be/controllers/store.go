@@ -4,46 +4,25 @@ import (
 	"encoding/json"
 	db "main/database"
 	md "main/models"
+	"main/presenters"
 	"net/http"
 	"strconv"
-	"time"
 
-	"github.com/google/uuid"
 	"github.com/julienschmidt/httprouter"
-	"gorm.io/gorm"
 )
-
-type Collection struct {
-	Id        string    `json:"id"`
-	Name      string    `json:"name"`
-	Image     string    `json:"image"`
-	SellerId  string    `json:"seller_id"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
-}
-
-type CollectionDetail struct {
-	CollectionId string `json:"collection_id"`
-	ProductId    string `json:"product_id"`
-}
-
-func (u *Collection) BeforeCreate(tx *gorm.DB) (err error) {
-	u.Id = uuid.New().String()
-	return
-}
 
 func CreateCollection(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	userId := r.Context().Value("user_id")
 	payload := make(map[string]string)
 	err := json.NewDecoder(r.Body).Decode(&payload)
 	_db := db.Connect()
-	collection := Collection{Name: payload["name"], Image: payload["image"], SellerId: userId.(string)}
+	collection := md.Collection{Name: payload["name"], Image: payload["image"], SellerId: userId.(string)}
 	_db.Create(&collection)
 	if err != nil {
-		var response = md.BuildMessageResponse("Create collection failed")
+		var response = presenters.BuildMessageResponse("Create collection failed")
 		json.NewEncoder(w).Encode(response)
 	} else {
-		var response = md.BuildMessageResponse("Create collection successfully")
+		var response = presenters.BuildMessageResponse("Create collection successfully")
 		json.NewEncoder(w).Encode(response)
 	}
 }
@@ -52,7 +31,7 @@ func CreateProduct(w http.ResponseWriter, r *http.Request, ps httprouter.Params)
 	userId := r.Context().Value("user_id")
 	payload := make(map[string]interface{})
 	json.NewDecoder(r.Body).Decode(&payload)
-	product := md.Product{
+	product := presenters.Product{
 		Name:        payload["name"].(string),
 		Image:       payload["image"].(string),
 		Quantity:    int(payload["quantity"].(float64)),
@@ -64,36 +43,30 @@ func CreateProduct(w http.ResponseWriter, r *http.Request, ps httprouter.Params)
 	}
 	_db := db.Connect()
 
-	err := _db.Create(&product).Error
+	var collection md.Collection
+	_db.Where("seller_id = ?", userId).Order("created_at asc").First(&collection)
+	collection.Products = append(collection.Products, product)
+	err := _db.Save(&collection).Error
 	if err != nil {
-		var response = md.BuildMessageResponse("Create product failed")
+		var response = presenters.BuildMessageResponse("Create product failed")
 		json.NewEncoder(w).Encode(response)
 	} else {
-		var collection Collection
-		_db.Where("seller_id = ?", userId).Order("created_at asc").First(&collection)
-		collectionDetail := CollectionDetail{CollectionId: collection.Id, ProductId: product.Id}
-		err := _db.Create(&collectionDetail).Error
-		if err != nil {
-			var response = md.BuildMessageResponse("Create product failed")
-			json.NewEncoder(w).Encode(response)
-		} else {
-			var response = md.BuildMessageResponse("Create product successfully")
-			json.NewEncoder(w).Encode(response)
-		}
+		var response = presenters.BuildMessageResponse("Create product successfully")
+		json.NewEncoder(w).Encode(response)
 	}
 }
 
 func GetListCollection(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	sellerName := ps.ByName("seller_name")
+	id := ps.ByName("id")
 	_db := db.Connect()
-	var collections []Collection
-	err := _db.Table("users").Select("*").Joins("left join collections on collections.seller_id = users.id").Where("users.seller_name = ?", sellerName).Order("collections.created_at asc").Scan(&collections).Error
+	var collections []md.Collection
+	err := _db.Preload("Products").Where("seller_id = ?", id).Find(&collections).Error
 	if err != nil {
 		w.WriteHeader(502)
-		var response = md.BuildErrorResponse("Server error", nil)
+		var response = presenters.BuildErrorResponse("Server error", nil)
 		json.NewEncoder(w).Encode(response)
 	} else {
-		var response = md.BuildResponse(collections)
+		var response = presenters.BuildResponse(collections)
 		json.NewEncoder(w).Encode(response)
 	}
 }
@@ -101,16 +74,16 @@ func GetListCollection(w http.ResponseWriter, r *http.Request, ps httprouter.Par
 func GetStore(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	id := ps.ByName("id")
 	_db := db.Connect()
-	var collections []md.Collection
+	var collections []presenters.Collection
 	_db.Table("users").Select("*").Joins("left join collections on collections.seller_id = users.id").Where("users.id = ?", id).Order("collections.created_at asc").Scan(&collections)
 	for i := 0; i < len(collections); i++ {
-		var products []md.Product
+		var products []presenters.Product
 		_db.Table("products").Preload("Category").Select("products.*").Joins("left join categories on categories.id = products.category_id").Joins("left join collection_details on collection_details.product_id = products.id").Joins("left join collections on collections.id = collection_details.collection_id").Where("collections.id = ?", collections[i].Id).Order("products.created_at desc").Scan(&products)
 		collections[i].Products = products
 	}
-	store := md.Store{Collection: collections}
+	store := presenters.Store{Collection: collections}
 	_db.Where("id = ?", id).First(&store.User)
-	var response = md.BuildResponse(store)
+	var response = presenters.BuildResponse(store)
 	json.NewEncoder(w).Encode(response)
 }
 
@@ -131,9 +104,9 @@ func GetProductCollection(w http.ResponseWriter, r *http.Request, ps httprouter.
 		sort = "desc"
 	}
 	order := sortType + " " + sort
-	var products []md.Product
+	var products []presenters.Product
 	_db.Table("products").Select("products.*, collections.id as collection_id").Joins("left join collection_details on collection_details.product_id = products.id").Joins("left join collections on collections.id = collection_details.collection_id").Where("collections.id = ?", collectionId).Order(order).Offset(int(page * limit)).Limit(int(limit)).Scan(&products)
-	var response = md.BuildResponse(products)
+	var response = presenters.BuildResponse(products)
 	json.NewEncoder(w).Encode(response)
 }
 
@@ -142,14 +115,14 @@ func UpdateCollectionInformation(w http.ResponseWriter, r *http.Request, _ httpr
 	collection := make(map[string]interface{})
 	json.NewDecoder(r.Body).Decode(&collection)
 	_db := db.Connect()
-	var _collection Collection
+	var _collection md.Collection
 	_db.Where("id = ?", collection["id"]).First(&_collection)
 	if _collection.SellerId == userId {
-		_db.Model(Collection{}).Where("id = ?", _collection.Id).Updates(collection)
-		var response = md.BuildMessageResponse("Update collection successfully")
+		_db.Model(md.Collection{}).Where("id = ?", _collection.Id).Updates(collection)
+		var response = presenters.BuildMessageResponse("Update collection successfully")
 		json.NewEncoder(w).Encode(response)
 	} else {
-		var response = md.BuildMessageResponse("Update collection failed. Account is invalid")
+		var response = presenters.BuildMessageResponse("Update collection failed. Account is invalid")
 		json.NewEncoder(w).Encode(response)
 	}
 }
@@ -161,12 +134,12 @@ func UpdateProduct(w http.ResponseWriter, r *http.Request, _ httprouter.Params) 
 	_db := db.Connect()
 	var _product md.Product
 	_db.Where("id = ?", product["id"]).First(&_product)
-	if _product.CategoryId == userId {
-		_db.Model(Collection{}).Where("id = ?", _product.Id).Updates(product)
-		var response = md.BuildMessageResponse("Update product successfully")
+	if _product.CreatorId == userId {
+		_db.Model(md.Product{}).Where("id = ?", _product.Id).Updates(product)
+		var response = presenters.BuildMessageResponse("Update product successfully")
 		json.NewEncoder(w).Encode(response)
 	} else {
-		var response = md.BuildMessageResponse("Update product failed. Account is invalid")
+		var response = presenters.BuildMessageResponse("Update product failed. Account is invalid")
 		json.NewEncoder(w).Encode(response)
 	}
 }
@@ -176,28 +149,32 @@ func AddProductCollection(w http.ResponseWriter, r *http.Request, _ httprouter.P
 	payload := make(map[string]interface{})
 	json.NewDecoder(r.Body).Decode(&payload)
 	_db := db.Connect()
-	var _collection, collection Collection
-	_db.Where("id = ?", payload["id"]).First(&_collection)
-	if _collection.SellerId == userId {
-		_db.Where("seller_id = ?", userId).Order("created_at asc").First(&collection)
-		var collectionDetails []CollectionDetail
+	var collection, _collection md.Collection
+	_db.Where("id = ?", payload["id"]).First(&collection)
+	if collection.SellerId == userId {
+		_db.Preload("Products").Where("seller_id = ?", userId).Order("created_at asc").First(&_collection)
 		products := payload["product"].([]interface{})
 		for i := 0; i < len(products); i++ {
-			var cd CollectionDetail
-			_db.Where("product_id = ? and collection_id = ?", products[i], collection.Id).First(&cd)
-			if cd.ProductId == "" {
-				var response = md.BuildErrorResponse("Product is not in store", nil)
+			var product presenters.Product
+			for j, p := range _collection.Products {
+				if p.Id == products[i] {
+					product = _collection.Products[j]
+					break
+				}
+			}
+			if product.Id == "" {
+				var response = presenters.BuildErrorResponse("Product is not in store", nil)
 				json.NewEncoder(w).Encode(response)
 				return
 			} else {
-				collectionDetails = append(collectionDetails, CollectionDetail{ProductId: products[i].(string), CollectionId: payload["id"].(string)})
+				_db.Exec("INSERT INTO collection_details VALUES (?, ?)", collection.Id, product.Id)
 			}
 		}
-		_db.Create(collectionDetails)
-		var response = md.BuildMessageResponse("Add product into collection successfully")
+
+		var response = presenters.BuildMessageResponse("Add product into collection successfully")
 		json.NewEncoder(w).Encode(response)
 	} else {
-		var response = md.BuildMessageResponse("Update collection failed. Account is invalid")
+		var response = presenters.BuildMessageResponse("Update collection failed. Account is invalid")
 		json.NewEncoder(w).Encode(response)
 	}
 }
@@ -207,25 +184,32 @@ func DeleteProductCollection(w http.ResponseWriter, r *http.Request, _ httproute
 	payload := make(map[string]interface{})
 	json.NewDecoder(r.Body).Decode(&payload)
 	_db := db.Connect()
-	var _collection, collection Collection
+	var _collection, collection md.Collection
 	_db.Where("id = ?", payload["id"]).First(&_collection)
 	if _collection.SellerId == userId {
-		_db.Where("seller_id = ?", userId).Order("created_at asc").First(&collection)
+		_db.Preload("Products").Where("seller_id = ?", userId).Order("created_at asc").First(&collection)
 		products := payload["product"].([]interface{})
 		for i := 0; i < len(products); i++ {
-			var cd CollectionDetail
-			_db.Where("product_id = ? and collection_id = ?", products[i], collection.Id).First(&cd)
-			if cd.ProductId == "" {
-				var response = md.BuildErrorResponse("Product is not in store", nil)
+			var product presenters.Product
+			for j, p := range collection.Products {
+				if p.Id == products[i] {
+					product = collection.Products[j]
+					break
+				}
+			}
+			if product.Id == "" {
+				var response = presenters.BuildErrorResponse("Product is not in store", nil)
 				json.NewEncoder(w).Encode(response)
 				return
+			} else {
+				_collection.Products = append(_collection.Products, product)
 			}
 		}
-		_db.Where("collection_id = ?", payload["id"]).Delete(CollectionDetail{}, "product_id in ?", products)
-		var response = md.BuildMessageResponse("Remove product successfully")
+		_db.Model(&_collection).Association("Products").Delete(_collection.Products)
+		var response = presenters.BuildMessageResponse("Delete product in collection successfully")
 		json.NewEncoder(w).Encode(response)
 	} else {
-		var response = md.BuildErrorResponse("Update collection failed. Account is invalid", nil)
+		var response = presenters.BuildMessageResponse("Update collection failed. Account is invalid")
 		json.NewEncoder(w).Encode(response)
 	}
 }
@@ -235,15 +219,15 @@ func DeleteCollection(w http.ResponseWriter, r *http.Request, _ httprouter.Param
 	payload := make(map[string]interface{})
 	json.NewDecoder(r.Body).Decode(&payload)
 	_db := db.Connect()
-	var _collection Collection
-	_db.Where("id = ?", payload["id"]).First(&_collection)
-	if _collection.SellerId == userId {
-		_db.Where("collection_id = ?", payload["id"]).Delete(CollectionDetail{})
-		_db.Where("id = ?", payload["id"]).Delete(Collection{})
-		var response = md.BuildMessageResponse("Delete collection successfully")
+	var collection md.Collection
+	_db.Where("id = ?", payload["id"]).First(&collection)
+	if collection.SellerId == userId {
+		_db.Model(&collection).Association("Products").Clear()
+		_db.Delete(&collection)
+		var response = presenters.BuildMessageResponse("Delete collection successfully")
 		json.NewEncoder(w).Encode(response)
 	} else {
-		var response = md.BuildErrorResponse("Update collection failed. Account is invalid", nil)
+		var response = presenters.BuildErrorResponse("Update collection failed. Account is invalid", nil)
 		json.NewEncoder(w).Encode(response)
 	}
 }

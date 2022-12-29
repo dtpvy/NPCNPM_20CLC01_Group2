@@ -8,8 +8,8 @@ import (
 )
 
 func UserRouter(router *httprouter.Router) {
-	router.GET("/user_info", mid.VerifyJWT(controllers.GetUserInfo))
-	router.GET("/user/requests", mid.VerifyJWT(controllers.Login))
-	router.GET("/user/orders", mid.VerifyJWT(controllers.Login))
-	router.PUT("/user_info/update", mid.VerifyJWT(controllers.UpdateUserInfo))
+	router.GET("/user_info", mid.AddHeader(mid.VerifyJWT(controllers.GetUserInfo)))
+	router.GET("/user/requests", mid.AddHeader(mid.VerifyJWT(controllers.Login)))
+	router.GET("/user/orders", mid.AddHeader(mid.VerifyJWT(controllers.GetUserOrders)))
+	router.PUT("/user_info/update", mid.AddHeader(mid.VerifyJWT(controllers.UpdateUserInfo)))
 }
