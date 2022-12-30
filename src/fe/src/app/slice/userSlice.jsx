@@ -8,7 +8,10 @@ const serverData = {
 	gender: "Nam",
 	dateOfBirth: "2002-03-28",
 	dateCreated: "2022-12-1",
-	cart: [],
+	cart: [
+		{ id: 2, amount: 1 },
+		{ id: 3, amount: 2 },
+	],
 	resolving: [
 		{ id: 1, amount: 3 },
 		{ id: 2, amount: 4 },
@@ -16,10 +19,6 @@ const serverData = {
 	shipping: [{ id: 3, amount: 2 }],
 	history: [{ id: 6, amount: 1 }],
 	cancelled: [],
-	cart: [
-		{ id: 5, amount: 1 },
-		{ id: 6, amount: 2 },
-	],
 };
 
 export const getUser = createAsyncThunk("user/getUser", async () => {
@@ -27,6 +26,7 @@ export const getUser = createAsyncThunk("user/getUser", async () => {
 });
 
 export const updateUser = createAsyncThunk("user/updateUser", async (data) => {
+	// update backend data;
 	return data;
 });
 
@@ -52,3 +52,4 @@ const userSlice = createSlice({
 export const getUserQuery = (state) => state.user.data;
 
 export default userSlice.reducer;
+

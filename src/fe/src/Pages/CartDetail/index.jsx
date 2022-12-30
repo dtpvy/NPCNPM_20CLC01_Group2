@@ -63,7 +63,7 @@ const ProductRow = () => {
 	);
 };
 
-const Order = () => {
+const CartDetail = () => {
 	const navigate = useNavigate();
 
 	return (
@@ -130,4 +130,4 @@ const Order = () => {
 	);
 };
 
-export default Order;
+export default CartDetail;

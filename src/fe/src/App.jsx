@@ -6,7 +6,7 @@ import SellerProfile from "./Components/SellerProfile";
 import Layout from "./Components/Layout";
 import Support from "./Components/Support";
 import Order from "./Pages/Order";
-import Cart from "./Pages/CartDetail";
+import CartDetail from "./Pages/CartDetail";
 import ProductDetail from "./Components/ProductDetail";
 import Login from "./Components/Login";
 import Register from "./Components/Register";
@@ -32,7 +32,7 @@ const App = () => {
 				<Route path="detail/:id" element={<ProductDetail />} /> {/*fixed*/}
 				<Route path="bought" element={<Bought />} /> {/*???*/}
 				<Route path="order" element={<Order />} />
-				<Route path="cart" element={<Cart />} /> {/*semi-fixed*/}
+				<Route path="cart" element={<CartDetail />} /> {/*semi-fixed*/}
 				<Route path="payment" element={<Payment />} /> {/*semi-fixed*/}
 				<Route path="support" element={<Support />} /> {/*semi-fixed*/}
 			</Route>
