@@ -6,9 +6,8 @@ import (
 )
 
 type OrderItem struct {
-	OrderId  string `gorm:"primaryKey" json:"order_id"`
-	SellerId string `gorm:"primaryKey" json:"seller_id"`
-	// Package   OrderPackage       `gorm:"foreignKey:OrderId,SellerId" json:"package"`
+	OrderId   string             `gorm:"primaryKey" json:"order_id"`
+	SellerId  string             `gorm:"primaryKey" json:"seller_id"`
 	ProductId string             `json:"product_id"`
 	Product   presenters.Product `gorm:"foreignKey:ProductId" json:"-"`
 	Quantity  int                `json:"quantity"`

@@ -24,6 +24,7 @@ func CheckErr(err error) {
 
 func Connect() *gorm.DB {
 	env := os.Getenv("ENV")
+	env = "dev"
 	dev := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
 	prod := os.Getenv("DATABASE_PROD")
 	if env == "dev" {

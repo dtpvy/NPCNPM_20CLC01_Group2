@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
 	db "main/database"
 	md "main/models"
 	"main/presenters"
@@ -51,20 +50,19 @@ func UpdateUserInfo(w http.ResponseWriter, r *http.Request, _ httprouter.Params)
 
 func GetUserOrders(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	userId := r.Context().Value("user_id")
-	fmt.Println()
 	_db := db.Connect()
 	var orders []md.Order
-	_db.Preload(clause.Associations).Preload("OrderPackages.Seller").Preload("OrderPackages.OrderItems").Find(&orders)
-	for _, order := range orders {
-		if userId != order.UserId {
-			for _, pk := range order.OrderPackages {
-				if pk.SellerId == userId {
-					order.OrderPackages = []md.OrderPackage{pk}
-					break
-				}
-			}
-		}
-	}
+	_db.Preload(clause.Associations).Preload("OrderPackages.Seller").Preload("OrderPackages.OrderItems").Where("user_id = ?", userId).Find(&orders)
+
+	var response = presenters.BuildResponse(orders)
+	json.NewEncoder(w).Encode(response)
+}
+
+func GetSellerOrders(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	userId := r.Context().Value("user_id")
+	_db := db.Connect()
+	var orders []presenters.OrderPackage
+	_db.Preload(clause.Associations).Preload("Order.User").Where("seller_id = ?", userId).Find(&orders)
 
 	var response = presenters.BuildResponse(orders)
 	json.NewEncoder(w).Encode(response)

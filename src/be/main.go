@@ -18,6 +18,7 @@ func main() {
 	routes.CaterodyRouter(router)
 	routes.CartRouter(router)
 	routes.OrderRouter(router)
+	routes.ReportRouter(router)
 	// router.POST("/auth/register", routes.Register)
 	// router.GET("/home/category", routes.GetCategories)
 	// router.GET("/home/product", routes.GetProductSuggestion)
