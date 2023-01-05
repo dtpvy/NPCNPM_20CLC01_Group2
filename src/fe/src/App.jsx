@@ -40,6 +40,7 @@ const App = () => {
         <Route path="payment" element={<Payment />} /> {/*semi-fixed*/}
         <Route path="support" element={<Support />} /> {/*semi-fixed*/}
       </Route>
+      <Route path="login" element={<Login />} /> {/*semi-fixed*/}
     </Routes>
   );
 };

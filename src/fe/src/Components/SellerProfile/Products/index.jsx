@@ -1,24 +1,29 @@
 import React from "react";
 import ProductBox from "../../Home/Suggestion/ProductBox";
+import { getAllProduct } from "../../../Services/product";
+import { useSearchParams } from "react-router-dom";
 
 export default function Products() {
-  const products = [
-    { name: "Quần áo 1", price: "200.0" },
-    { name: "Điện thoại 1", price: "2000.0" },
-    { name: "Thiết bị điện tử 1", price: "200.0" },
-    { name: "iphone 1", price: "200.0" },
-    { name: "mũ 1", price: "200.0" },
-    { name: "Sách 1", price: "200.0" },
-    { name: "áo 1", price: "200.0" },
-    { name: "Thiết bị điện tử 1", price: "200.0" },
-    { name: "iphone 1", price: "200.0" },
-    { name: "mũ 1", price: "200.0" },
-    { name: "Sách 1", price: "200.0" },
-    { name: "áo 1", price: "200.0" },
-  ];
-  const Products = products.map((thing, index) => {
-    return <ProductBox key={index} product={thing.name} price={thing.price} />;
-  });
+  const products = getAllProduct();
+
+  const [filterParams, setFilterParams] = useSearchParams();
+  const searchTerm = filterParams.get("item") || "";
+  const handleFilter = (event) => {
+    const item = event.target.value;
+    if (item) {
+      setFilterParams({ item });
+    } else {
+      setFilterParams();
+    }
+  };
+
+  const Products = products
+    .filter((item) =>
+      item.title.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    .map((item, index) => {
+      return <ProductBox key={index} title={item.title} price={item.price} />;
+    });
 
   return (
     <div className="">

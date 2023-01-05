@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getCategory } from "../../Services/category";
 import avatar from "./avatar.png";
+import "./header.css";
+import { useSearchParams } from "react-router-dom";
 
 export default function Header() {
   const [categories, setCategories] = useState([]);
@@ -12,14 +14,6 @@ export default function Header() {
     });
   }, []);
   const navigate = useNavigate();
-  const category = [
-    "trái cây",
-    "thịt trứng",
-    "rau củ quả",
-    "sữa, bơ, phô mai",
-    "hải sản",
-    "gạo, mì ăn liền",
-  ];
 
   const categoryElements = categories.map((thing, index) => {
     return (
@@ -35,6 +29,17 @@ export default function Header() {
     );
   });
 
+  const [searchParams, setSearchParams] = useSearchParams();
+  const searchTerm = searchParams.get("item") || "";
+  const handleSearch = (event) => {
+    const item = event.target.value;
+    if (item) {
+      setSearchParams({ item });
+    } else {
+      setSearchParams();
+    }
+  };
+
   return (
     <header className="bg-sky-600 flex items-center justify-center h-24">
       <div
@@ -48,11 +53,16 @@ export default function Header() {
       </div>
       <div className="w-5/12 md:w-7/12 mx-20 flex flex-col justify-start">
         <div className="flex items-center h-9 mb-1">
-          <input type="text" className="h-full w-3/5 md:w-9/12 pl-3" />
+          <input
+            type="text"
+            value={searchTerm}
+            className="h-full w-3/5 md:w-9/12 pl-3"
+          />
           <div
             className="h-full bg-blue-800 hover:bg-blue-700 text-white px-3 cursor-pointer flex items-center justify-center"
             onClick={() => {
               navigate(`/search`);
+              handleSearch();
             }}
           >
             <i className="fa fa-search inline"></i>
@@ -76,10 +86,30 @@ export default function Header() {
             <img src={avatar} alt="" className="h-10 block" />
           </div>
           <div className="flex gap-3">
-            <a id="account" className="block text-white text-sm max-md:hidden">
+            <div class="dropdown h-12">
+              <button class="dropbtn">
+                Dropdown
+                <i class="fa fa-caret-down"></i>
+              </button>
+              <div class="dropdown-content">
+                <a
+                  onClick={() => {
+                    navigate("/profile");
+                  }}
+                >
+                  Tài khoản
+                </a>
+                <a className="block" href="/login">
+                  Đăng xuất
+                </a>
+              </div>
+              <p className="">User name</p>
+            </div>
+
+            {/* <a id="account" className="block text-white text-sm max-md:hidden">
               <span>Tài khoản</span>
               <p className="">User name</p>
-            </a>
+            </a> */}
           </div>
         </div>
 
