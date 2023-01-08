@@ -1,54 +1,99 @@
 import React from "react";
 import ProductBox from "../../Home/Suggestion/ProductBox";
+import { getAllProduct } from "../../../Services/product";
+import { useSearchParams } from "react-router-dom";
 
 export default function Products() {
-	const products = [
-		{ name: "Quần áo 1", price: "200.0" },
-		{ name: "Điện thoại 1", price: "2000.0" },
-		{ name: "Thiết bị điện tử 1", price: "200.0" },
-		{ name: "iphone 1", price: "200.0" },
-		{ name: "mũ 1", price: "200.0" },
-		{ name: "Sách 1", price: "200.0" },
-		{ name: "áo 1", price: "200.0" },
-		{ name: "Thiết bị điện tử 1", price: "200.0" },
-		{ name: "iphone 1", price: "200.0" },
-		{ name: "mũ 1", price: "200.0" },
-		{ name: "Sách 1", price: "200.0" },
-		{ name: "áo 1", price: "200.0" },
-	];
-	const Products = products.map((thing, index) => {
-		return <ProductBox key={index} product={thing.name} price={thing.price} />;
-	});
+  const products = getAllProduct();
 
-	return (
-		<div className="">
-			<div className="flex items-center justify-between mb-5">
-				<div className="flex gap-2">
-					<div className="text-lg">Sắp xếp theo:</div>
-					<div className="bg-white w-20 cursor-pointer flex items-center justify-center rounded-md hover:bg-slate-300">
-						Mới nhất
-					</div>
-					<div className="bg-white w-20 cursor-pointer flex items-center justify-center rounded-md hover:bg-slate-300">
-						Giá
-					</div>
-					<div className="bg-white w-20 cursor-pointer flex items-center justify-center rounded-md hover:bg-slate-300">
-						Phổ Biến
-					</div>
-				</div>
-				<div className="flex items-center">
-					<div className="h-8 flex items-center">
-						<span>1</span>
-						<span>/2</span>
-					</div>
-					<div className="h-8 flex items-center">
-						<i className="fa fa-toggle-left	text-xl mx-1 pl-3"></i>
-					</div>
-					<div className="h-8 flex items-center">
-						<i className="fa fa-toggle-right text-xl mx-1"></i>
-					</div>
-				</div>
-			</div>
-			<div className="grid grid-cols-5 gap-3">{Products}</div>
-		</div>
-	);
+  const [filterParams, setFilterParams] = useSearchParams();
+  const searchTerm = filterParams.get("filter") || "";
+  const handleFilter = (event) => {
+    const item = event.target.value;
+    if (item) {
+      setFilterParams({ item });
+    } else {
+      setFilterParams();
+    }
+  };
+
+  // let productFilter = [...products];
+  // let filter = document.getElementByName("filter")[0].value;
+  // switch (filter) {
+  //   case "newest":
+  //     break;
+  //   case "oldest":
+  //     break;
+  //   case "cheapest":
+  //     productFilter = products.slice().sort((a, b) => a - b);
+  //     break;
+  //   case "most-expensive":
+  //     break;
+  //   case "popular":
+  //     break;
+  //   default:
+  //     productFilter = [...products];
+  //     break;
+  // }
+  const Products = products.map((item, index) => {
+    return (
+      <ProductBox
+        key={index}
+        title={item.title}
+        price={item.price}
+        id={item.id}
+      />
+    );
+  });
+
+  return (
+    <div className="">
+      <div className="flex items-center justify-between mt-2 mb-5">
+        <div className="flex gap-2">
+          <div className="text-lg">Lọc:</div>
+
+          <select
+            className="bg-white w-24 cursor-pointer flex items-center justify-center rounded-md hover:bg-slate-300"
+            name="filter"
+            id="filter"
+          >
+            <option value="">Sắp xếp theo</option>
+            <option value="newest">Mới nhất</option>
+            <option value="oldest">Cũ nhất</option>
+            <option value="">Giá</option>
+            <option value="most-expensive">Đắt nhất</option>
+            <option value="cheapest">Rẻ nhất</option>
+            <option value="popular">Phổ Biến</option>
+          </select>
+
+          {/* <select
+            className="bg-white w-24 cursor-pointer flex items-center justify-center rounded-md hover:bg-slate-300"
+            name="filter-price"
+            id="filter-price"
+          >
+            <option value="">Giá</option>
+            <option value="most-expensive">Đắt nhất</option>
+            <option value="cheapest">Rẻ nhất</option>
+          </select>
+
+          <div className="bg-white w-20 cursor-pointer flex items-center justify-center rounded-md hover:bg-slate-300">
+            Phổ Biến
+          </div> */}
+        </div>
+        {/* <div className="flex items-center">
+          <div className="h-8 flex items-center">
+            <span>1</span>
+            <span>/2</span>
+          </div>
+          <div className="h-8 flex items-center">
+            <i className="fa fa-toggle-left	text-xl mx-1 pl-3"></i>
+          </div>
+          <div className="h-8 flex items-center">
+            <i className="fa fa-toggle-right text-xl mx-1"></i>
+          </div>
+        </div> */}
+      </div>
+      <div className="grid grid-cols-5 gap-3">{Products}</div>
+    </div>
+  );
 }
