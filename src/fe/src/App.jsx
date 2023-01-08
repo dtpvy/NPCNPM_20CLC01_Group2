@@ -15,7 +15,6 @@ import Profile from "./Components/Profile/Profile";
 import Bought from "./Components/Profile/Bought";
 import EditProfile from "./Components/Profile/EditProfile";
 import Payment from "./Components/Payment";
-import Search from "./Pages/Search";
 import Category from "./Pages/Category";
 // import { loginAPI } from "./Services/account.js";
 
@@ -32,7 +31,6 @@ const App = () => {
           {/*semi-fixed*/}
         </Route>
         <Route path="category" element={<Category />} /> {/*???*/}
-        <Route path="search" element={<Search />} /> {/*???*/}
         <Route path="detail/:id" element={<ProductDetail />} /> {/*fixed*/}
         <Route path="bought" element={<Bought />} /> {/*???*/}
         <Route path="order" element={<Order />} />
@@ -41,6 +39,7 @@ const App = () => {
         <Route path="support" element={<Support />} /> {/*semi-fixed*/}
       </Route>
       <Route path="login" element={<Login />} /> {/*semi-fixed*/}
+      <Route path="register" element={<Register />} /> {/*semi-fixed*/}
     </Routes>
   );
 };

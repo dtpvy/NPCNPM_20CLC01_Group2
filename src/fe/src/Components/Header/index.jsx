@@ -4,16 +4,25 @@ import { getCategory } from "../../Services/category";
 import avatar from "./avatar.png";
 import "./header.css";
 import { useSearchParams } from "react-router-dom";
+import { getAllProduct } from "../../Services/product";
 
 export default function Header() {
+  const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
-
   useEffect(() => {
     getCategory().then((res) => {
       setCategories(res);
     });
   }, []);
-  const navigate = useNavigate();
+
+  const [products, setProducts] = useState(getAllProduct());
+
+  // const [products, setProducts] = useState([]);
+  // useEffect(() => {
+  //   getAllProduct().then((res) => {
+  //     setProducts(res);
+  //   });
+  // }, []);
 
   const categoryElements = categories.map((thing, index) => {
     return (
@@ -36,16 +45,61 @@ export default function Header() {
     if (item) {
       setSearchParams({ item });
     } else {
-      setSearchParams();
+      setSearchParams({});
     }
   };
 
+  const found1 = categories
+    .filter((item) =>
+      item.title.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    .map((item, i) => {
+      if (searchTerm != "") {
+        return (
+          <li
+            key={i}
+            className="bg-amber-100	pl-4 border-b border-neutral-600	"
+            onClick={() => {
+              navigate(`/category`); //sửa thêm id
+            }}
+          >
+            {item.title} - danh mục
+          </li>
+        );
+      }
+    });
+
+  const found2 = products
+    .filter((item) =>
+      item.title.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    .map((item, i) => {
+      if (searchTerm != "") {
+        return (
+          <li
+            key={i * 5}
+            className="bg-cyan-100	pl-4 border-b border-neutral-600	"
+            onClick={() => {
+              navigate(`/detail/${item.id}`);
+            }}
+          >
+            {item.title} - sản phẩm
+          </li>
+        );
+      }
+    });
+  let found;
+  if (searchTerm != "") {
+    found = found1.concat(found2);
+  }
+  // const found = found1.concat(found2);
   return (
     <header className="bg-sky-600 flex items-center justify-center h-24">
       <div
         className="text-white p-3 bg-red-300 cursor-pointer"
         onClick={() => {
           navigate("/");
+          let searchBar = document.querySelector("#search-bar");
         }}
       >
         <span>Webanhang</span>
@@ -56,19 +110,20 @@ export default function Header() {
           <input
             type="text"
             value={searchTerm}
-            className="h-full w-3/5 md:w-9/12 pl-3"
+            className="h-full w-6/12 md:w-9/12 pl-3"
+            onChange={handleSearch}
+            id="search-bar"
           />
+
           <div
             className="h-full bg-blue-800 hover:bg-blue-700 text-white px-3 cursor-pointer flex items-center justify-center"
-            onClick={() => {
-              navigate(`/search`);
-              handleSearch();
-            }}
+            onClick={handleSearch}
           >
             <i className="fa fa-search inline"></i>
             <span> Tìm kiếm</span>
           </div>
         </div>
+        <ul className="absolute top-14 left-1/12 bg-white w-5/12">{found}</ul>
         <nav>
           <div className="max-md:hidden flex gap-3 text-white" id="catagory">
             {categoryElements}
@@ -86,12 +141,12 @@ export default function Header() {
             <img src={avatar} alt="" className="h-10 block" />
           </div>
           <div className="flex gap-3">
-            <div class="dropdown h-12">
-              <button class="dropbtn">
+            <div className="dropdown h-12">
+              <button className="dropbtn">
                 Dropdown
-                <i class="fa fa-caret-down"></i>
+                <i className="fa fa-caret-down"></i>
               </button>
-              <div class="dropdown-content">
+              <div className="dropdown-content">
                 <a
                   onClick={() => {
                     navigate("/profile");
