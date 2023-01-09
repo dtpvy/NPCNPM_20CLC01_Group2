@@ -7,7 +7,7 @@ import bill from "./bill.png";
 import support from "./sp.png";
 
 const buttons = [
-	{ image: store, text: "Cửa hàng của tôi", path: "/profile/seller-profile" },
+	{ image: store, text: "Cửa hàng của tôi", path: "/profile/store" },
 	{ image: bill, text: "Đơn hàng đã mua", path: "/bought" },
 	{ image: support, text: "Yêu cầu hỗ trợ", path: "/support" },
 ];

@@ -7,17 +7,26 @@ import avatar from "./avatar.png";
 import Template from "./Template";
 
 const data = [
-	{ key: "username", label: "Tên đăng nhập" },
 	{ key: "fullname", label: "Tên người dùng" },
+	{ key: "seller_name", label: "Tên người bán" },
 	{ key: "email", label: "Email" },
 	{ key: "phone", label: "Số điện thoại" },
-	{ key: "gender", label: "Giới tính" },
-	{ key: "dateOfBirth", label: "Ngày sinh" },
+	{ key: "address", label: "Địa chỉ" },
 ];
+
+const dateDiff = (start, end) => {
+	if (!end) {
+		end = new Date();
+	}
+	const t1 = Date.parse(start);
+	const t2 = Date.parse(end);
+	return Math.floor((t2 - t1) / (24 * 3600 * 1000));
+};
 
 export default function Profile() {
 	const user = useSelector(getUserQuery);
 	const navigate = useNavigate();
+	// console.log(user);
 
 	return (
 		<div>
@@ -55,14 +64,14 @@ export default function Profile() {
 				</div>
 				<div className="flex flex-col justify-center items-center gap-y-2">
 					<div className="w-48 aspect-square p-2 bg-slate-400 rounded-full flex items-center justify-center">
-						<img className="w-full" src={avatar} alt="" />
+						<img className="w-full" src={user.image} alt="cannot load image" />
 					</div>
 					<div className="w-48 mt-4 h-0.5 bg-green-200"></div>
 					{/* <div className="bg-sky-600 px-6 py-1 rounded-md text-white cursor-pointer inline-block hover:bg-sky-800 hover:scale-105 duration-300">
 						Chọn ảnh
 					</div> */}
 					<div className="flex flex-row text-slate-400">
-						Gia nhập {dateDiff(user.dateCreated)} ngày trước
+						Gia nhập {dateDiff(user.created_at)} ngày trước
 					</div>
 					<div className="flex flex-row text-slate-400"></div>
 				</div>
@@ -70,12 +79,3 @@ export default function Profile() {
 		</div>
 	);
 }
-
-const dateDiff = (start, end) => {
-	if (!end) {
-		end = new Date();
-	}
-	const t1 = Date.parse(start);
-	const t2 = Date.parse(end);
-	return Math.floor((t2 - t1) / (24 * 3600 * 1000));
-};

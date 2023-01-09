@@ -1,7 +1,4 @@
 import React from "react";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { getCollections } from "../../app/slice/collectionsSlice";
 
 import Category from "./Category";
 import Suggestion from "./Suggestion";

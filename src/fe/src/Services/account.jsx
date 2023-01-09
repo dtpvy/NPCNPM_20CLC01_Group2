@@ -16,3 +16,20 @@ import request from "./request";
 //     return null;
 //   }
 // }
+
+export async function login({ email, password }) {
+	try {
+		const res = await request({
+			path: "auth/login",
+			method: "post",
+			data: {
+				email,
+				password,
+			},
+		});
+		return res.data;
+	} catch (err) {
+		console.log(err);
+		return null;
+	}
+}

@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import product_1 from "../../components/Images/product-1.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { useDispatch, useSelector } from "react-redux";
+import { getUserQuery, updateCart } from "../../app/slice/userSlice";
 
-const ProductRow = () => {
-	const [amount, setAmount] = useState(1);
+import { getProductById } from "../../Services/product";
 
+const ProductRow = ({ item, updater }) => {
 	return (
 		<>
 			<div className="col-span-3 flex gap-4 items-center">
@@ -15,9 +17,15 @@ const ProductRow = () => {
 					<img className="w-24 aspect-square" src={product_1} alt={product_1} />
 				</div>
 				<div className="">
-					<div className="font-bold text-sm">Bảng Vẽ Điện Tử Gaomon 1060Pro - 10x6 inch</div>
+					<div className="font-bold text-sm">{item.title}</div>
 					<div className="text-red-500 text-xs">Gaomon</div>
-					<div className="font-semibold hover:text-red-500 text-gray-500 text-xs">Xóa</div>
+					<div
+						className="font-semibold hover:text-red-500 text-gray-500 text-xs cursor-pointer"
+						onClick={() => {
+							updater("delete", item.id);
+						}}>
+						Xóa
+					</div>
 				</div>
 			</div>
 
@@ -26,7 +34,7 @@ const ProductRow = () => {
 					className="border-2 border-slate-500 px-2 cursor-pointer bg-blue-200 hover:bg-blue-300 rounded-l-md select-none"
 					type="button"
 					onClick={() => {
-						setAmount((x) => (x - 1 < 0 ? 0 : x - 1));
+						updater("decrement", item.id);
 					}}>
 					-
 				</div>
@@ -35,35 +43,56 @@ const ProductRow = () => {
 						className="w-10 text-center"
 						type="text"
 						name="qty-input"
-						value={amount}
-						onChange={(e) => {
-							if (e.target.value === "") {
-								setAmount(0);
-								return;
-							}
-							if (isNaN(e.target.value)) {
-								return;
-							}
-							setAmount(e.target.value);
-						}}
+						value={item.amount}
+						onChange={(e) => {}}
 					/>
 				</span>
 				<button
 					className="border-2 border-slate-500 bg-blue-200 px-2 cursor-pointer hover:bg-blue-300 rounded-r-md select-none"
 					type="button"
 					onClick={() => {
-						setAmount((x) => x + 1);
+						updater("increment", item.id);
 					}}>
 					+
 				</button>
 			</div>
-			<span className="flex items-center font-semibold text-sm">600 000 vnđ</span>
-			<span className="flex items-center font-semibold text-sm">600 000 vnđ</span>
+			<span className="flex items-center font-semibold text-sm">{item.price}</span>
+			<span className="flex items-center font-semibold text-sm">{item.price * item.amount}</span>
 		</>
 	);
 };
 
 const Order = () => {
+	const dispatch = useDispatch();
+	const user = useSelector(getUserQuery);
+	const [cart, setCart] = useState(user.cart);
+
+	const data = useMemo(() => {
+		return cart.map((item) => {
+			return { ...getProductById(item.id), amount: item.amount };
+		});
+	}, [cart]);
+
+	const updater = (type, id) => {
+		if (type === "increment") {
+			setCart((prev) =>
+				prev.map((item) => {
+					if (item.id !== id) return item;
+					return { id: item.id, amount: item.amount + 1 };
+				})
+			);
+		} else if (type === "decrement") {
+			setCart((prev) =>
+				prev.map((item) => {
+					if (item.id !== id) return item;
+					return { id: item.id, amount: item.amount - 1 < 0 ? 0 : item.amount - 1 };
+				})
+			);
+		} else if (type === "delete") {
+			setCart((prev) => prev.filter((item) => item.id !== id));
+		}
+	};
+
 	const navigate = useNavigate();
 
 	return (
@@ -88,9 +117,9 @@ const Order = () => {
 							<h3 className="font-semibold text-slate-500 text-xs uppercase">Đơn giá</h3>
 							<h3 className="font-semibold text-slate-500 text-xs uppercase">Thành tiền</h3>
 
-							<ProductRow />
-							<ProductRow />
-							<ProductRow />
+							{data.map((item, i) => {
+								return <ProductRow key={i} item={item} updater={updater} />;
+							})}
 						</div>
 
 						<div>
@@ -118,6 +147,7 @@ const Order = () => {
 							<button
 								className="bg-indigo-500 font-semibold hover:bg-indigo-800 hover:scale-105 duration-300 py-3 text-white rounded-md"
 								onClick={() => {
+									dispatch(updateCart(cart));
 									navigate("/payment");
 								}}>
 								Mua hàng

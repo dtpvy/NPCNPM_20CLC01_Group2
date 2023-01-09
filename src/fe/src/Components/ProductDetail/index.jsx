@@ -1,12 +1,18 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import { useNavigate, useParams } from "react-router-dom";
+import { addProductToCart, getUserQuery } from "../../app/slice/userSlice";
 
 import logo from "../../assets/logotest.svg";
 import productImg from "../../assets/producttest.jpg";
 import { getProductById } from "../../Services/product";
 
 const ProductDetail = () => {
+	const user = useSelector(getUserQuery);
+	const cart = user.cart;
+
+	const dispatch = useDispatch();
 	const { id } = useParams();
 	const data = getProductById(id);
 
@@ -21,7 +27,7 @@ const ProductDetail = () => {
 			<div className="bg-white p-5 shadow-lg rounded-sm grid grid-cols-2 divide-x-2">
 				<div className="flex flex-col justify-between h-full w-full pr-5">
 					<div className="flex flex-col gap-y-5">
-						<h2 className="mx-2 text-3xl font-bold">{data.title}</h2>
+						<h2 className="mx-2 text-3xl font-bold">{data.name}</h2>
 						<div className="text-white-400 mx-2">Đã bán: {data.sold}</div>
 						<div className="bg-slate-300 rounded-md mx-2 px-4 py-2 w-fit">
 							<span className="text-red-500 text-3xl font-bold">{data.price} vnđ</span>
@@ -58,7 +64,15 @@ const ProductDetail = () => {
 					<button
 						className="mx-2 bg-red-500 px-5 py-2 rounded-md w-36 text-white hover:bg-red-400 hover:scale-110 duration-300"
 						onClick={() => {
-							navigate("/");
+							if (cart.findIndex((item) => item.id === id) === -1) {
+								dispatch(addProductToCart({ id, amount }))
+									.unwrap()
+									.then(() => {
+										navigate("/cart");
+									});
+							} else {
+								navigate("/cart");
+							}
 						}}>
 						Mua ngay
 					</button>

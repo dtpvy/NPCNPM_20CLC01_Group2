@@ -8,34 +8,27 @@ import avatar from "./avatar.png";
 import Template from "./Template";
 
 const data = [
-	{ name: "Tên đăng nhập", value: "Caiminhchanh" },
-	{ name: "Tên người dùng", value: "MinhChanh" },
-	{ name: "Email", value: "cmchanh@yahoo.com" },
-	{ name: "Số điện thoại", value: "0123456789" },
-	{ name: "Giới tính", value: "Nam" },
-	{ name: "Ngày sinh", value: "28/03/2002" },
+	{ key: "fullname", label: "Tên người dùng" },
+	{ key: "seller_name", label: "Tên người bán" },
+	{ key: "email", label: "Email" },
+	{ key: "phone", label: "Số điện thoại" },
+	{ key: "address", label: "Địa chỉ" },
 ];
 
 export default function EditProfile() {
 	const user = useSelector(getUserQuery);
-	const dob = useMemo(() => {
-		return user["dateOfBirth"].split("-");
-	}, [user]);
 
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 
-	const usernameRef = useRef();
 	const fullnameRef = useRef();
 	const emailRef = useRef();
 	const phoneRef = useRef();
+	const sellerNameRef = useRef();
+	const addressRef = useRef();
+	const imageRef = useRef();
 
-	const [gender, setGender] = useState(user["gender"]);
-	const [day, setDay] = useState(dob[2]);
-	const [month, setMonth] = useState(dob[1]);
-	const [year, setYear] = useState(dob[0]);
-
-	const [selectedFile, setSelectedFile] = useState(null);
+	const [image, setImage] = useState(user.image);
 
 	return (
 		<div>
@@ -45,38 +38,43 @@ export default function EditProfile() {
 					onSubmit={(e) => {
 						e.preventDefault();
 						const data = {
-							username: usernameRef.current.value,
+							seller_name: sellerNameRef.current.value,
 							fullname: fullnameRef.current.value,
 							email: emailRef.current.value,
 							phone: phoneRef.current.value,
-							gender: gender,
-							dateOfBirth: `${year}-${month}-${day}`,
+							address: addressRef.current.value,
+							updated_at: new Date().toISOString(),
 						};
-						console.log(data);
-						dispatch(updateUser(data));
+						if (imageRef.current.value !== "") {
+							data["image"] = imageRef.current.value;
+						}
+						console.log({ ...user, ...data });
+						dispatch(updateUser({ ...user, ...data }));
 						navigate("/profile");
 					}}>
 					<div className="grid grid-cols-[1.5fr_3fr] mb-5">
 						<div className="flex flex-col gap-4">
 							{data.map((field) => {
 								return (
-									<div key={field.name} className="text-slate-500 border-2 border-transparent py-1">
-										{field.name}:
+									<div
+										key={field.label}
+										className="text-slate-500 border-2 border-transparent py-1">
+										{field.label}:
 									</div>
 								);
 							})}
 						</div>
 						<div className="flex flex-col gap-4">
 							<input
-								ref={usernameRef}
-								name="username"
-								defaultValue={user["username"]}
-								className="w-full border-2 border-slate-300 px-2 py-1"
-							/>
-							<input
 								ref={fullnameRef}
 								name="fullname"
 								defaultValue={user["fullname"]}
+								className="w-full border-2 border-slate-300 px-2 py-1"
+							/>
+							<input
+								ref={sellerNameRef}
+								name="seller_name"
+								defaultValue={user["seller_name"]}
 								className="w-full border-2 border-slate-300 px-2 py-1"
 							/>
 							<input
@@ -91,7 +89,13 @@ export default function EditProfile() {
 								defaultValue={user["phone"]}
 								className="w-full border-2 border-slate-300 px-2 py-1"
 							/>
-							<div className="flex gap-4 w-full border-2 border-transparent py-1">
+							<input
+								ref={addressRef}
+								name="address"
+								defaultValue={user["address"]}
+								className="w-full border-2 border-slate-300 px-2 py-1"
+							/>
+							{/* <div className="flex gap-4 w-full border-2 border-transparent py-1">
 								{genders.map((g) => {
 									<div className="flex gap-1">
 										<input
@@ -142,8 +146,8 @@ export default function EditProfile() {
 									/>
 									<label htmlFor="gioitinh">Khác</label>
 								</div>
-							</div>
-							<div className="flex gap-2 w-full border-2 border-transparent py-1">
+							</div> */}
+							{/* <div className="flex gap-2 w-full border-2 border-transparent py-1">
 								<select
 									className="w-14 bg-white px-2 py-1 hover:bg-slate-300 rounded-sm"
 									name="day"
@@ -191,7 +195,7 @@ export default function EditProfile() {
 										);
 									})}
 								</select>
-							</div>
+							</div> */}
 						</div>
 					</div>
 					<button
@@ -202,43 +206,19 @@ export default function EditProfile() {
 				</form>
 				<div className="p-5 flex flex-col justify-center items-center gap-y-2">
 					<div className="w-48 aspect-square p-2 bg-slate-400 rounded-full flex items-center justify-center">
-						<img className="w-full" src={avatar} alt="" />
+						<img className="w-full" src={image} alt="cannot load image" />
 					</div>
-
-					<label className="bg-sky-600 rounded-md px-4 py-2 cursor-pointer hover:bg-sky-800 duration-300 hover:scale-105 text-white">
+					<div className="flex flex-col gap-2">
+						<div>Copy Link ảnh vào đây để thay đổi ảnh đại diện: </div>
 						<input
-							type="file"
-							style={{
-								display: "none",
-							}}
-							onChange={(event) => {
-								setSelectedFile(event.target.files[0]);
+							className="w-full rounded-md h-8 p-2"
+							ref={imageRef}
+							onChange={(e) => {
+								setImage(e.target.value);
 							}}
 						/>
-						Chọn ảnh
-					</label>
-					{selectedFile !== null ? (
-						<div className="w-48 flex flex-col gap-2">
-							<div className="text-slate-500">
-								File đã chọn: <span className="text-black">{selectedFile.name}</span>
-							</div>
-							<div className="text-slate-500">
-								Kích cỡ:{" "}
-								<span className="text-black">{Math.round(selectedFile.size / 1024)} KB</span>
-							</div>
-						</div>
-					) : (
-						<></>
-					)}
-					<div className="w-48 h-0.5 bg-green-300"></div>
-					<div className="flex flex-col gap-2">
-						<div className="text-slate-500">
-							Dung lượng file tối đa: <span className="text-black">1 MB</span>
-						</div>
-						<div className="text-slate-500">
-							Định dạng: <span className="text-black">.JPEG, .PNG</span>
-						</div>
 					</div>
+					<div className="w-48 h-0.5 bg-green-300 mt-4"></div>
 				</div>
 			</Template>
 		</div>

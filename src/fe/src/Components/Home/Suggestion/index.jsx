@@ -8,7 +8,7 @@ export default function Suggestion() {
 	const suggestions = getAllProduct();
 
 	const Suggestions = suggestions.map((thing, index) => {
-		return <ProductBox key={index} id={thing.id} title={thing.title} price={thing.price} />;
+		return <ProductBox key={index} id={thing.id} title={thing.name} price={thing.price} />;
 	});
 
 	return (

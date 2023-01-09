@@ -27,6 +27,3 @@ export default function request({ path, baseUrl, params, data, headers, method }
 			});
 	});
 }
-
-
-// getCategory() => request => Promise => data_category = then.catch
