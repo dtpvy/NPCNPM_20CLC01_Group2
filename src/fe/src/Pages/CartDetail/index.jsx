@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import product_1 from "../../components/Images/product-1.png";
+// import product_1 from "../../components/Images/product-1.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,7 +14,7 @@ const ProductRow = ({ item, updater }) => {
 		<>
 			<div className="col-span-3 flex gap-4 items-center">
 				<div className="">
-					<img className="w-24 aspect-square" src={product_1} alt={product_1} />
+					<img className="w-24 aspect-square" src={""} alt={""} />
 				</div>
 				<div className="">
 					<div className="font-bold text-sm">{item.title}</div>

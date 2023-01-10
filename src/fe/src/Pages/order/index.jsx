@@ -1,5 +1,5 @@
 import React from "react";
-import productImg from "../../components/Images/product-1.png";
+// import productImg from "../../components/Images/product-1.png";
 
 const Order = () => {
 	return (
@@ -67,7 +67,7 @@ const Order = () => {
 							{/* image of product */}
 							<img
 								className="w-24 aspect-square object-cover"
-								src={productImg}
+								src={""}
 								alt="Bảng Vẽ Điện Tử Gaomon 1060Pro - 10x6 inch"
 							/>
 						</div>

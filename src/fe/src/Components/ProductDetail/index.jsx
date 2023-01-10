@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { addProductToCart, getUserQuery } from "../../app/slice/userSlice";
 
-import logo from "../../assets/logotest.svg";
-import productImg from "../../assets/producttest.jpg";
+// import logo from "../../assets/logotest.svg";
+// import productImg from "../../assets/producttest.jpg";
 import { getProductById } from "../../Services/product";
 
 const ProductDetail = () => {
@@ -22,7 +22,7 @@ const ProductDetail = () => {
 	return (
 		<div className="grid grid-cols-[1fr_2fr] gap-x-3">
 			<div className="bg-slate-200 p-1">
-				<img src={productImg} alt="cannot load" className="w-full h-full object-contain" />
+				<img src={""} alt="cannot load" className="w-full h-full object-contain" />
 			</div>
 			<div className="bg-white p-5 shadow-lg rounded-sm grid grid-cols-2 divide-x-2">
 				<div className="flex flex-col justify-between h-full w-full pr-5">
@@ -81,7 +81,7 @@ const ProductDetail = () => {
 					<div>
 						<div className="flex items-center">
 							<div className="aspect-square h-16">
-								<img src={logo} alt="cannot load" className="w-full h-full object-fill" />
+								<img src={""} alt="cannot load" className="w-full h-full object-fill" />
 							</div>
 							<h2 className="mx-2 text-3xl font-bold">Unilever</h2>
 						</div>
