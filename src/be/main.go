@@ -7,6 +7,7 @@ import (
 
 	"github.com/julienschmidt/httprouter"
 	_ "github.com/lib/pq"
+	"github.com/rs/cors"
 )
 
 func main() {
@@ -26,5 +27,11 @@ func main() {
 
 	fmt.Println("Server start with port 8080")
 
-	http.ListenAndServe(":8080", router)
+	c := cors.New(cors.Options{
+		AllowedOrigins: []string{"*"},
+		AllowedMethods: []string{"GET", "POST", "DELETE", "PUT", "OPTIONS"},
+		AllowedHeaders: []string{"Origin", "X-Requested-With", "Content-Type, Accept", "X-Access-Token"},
+	})
+
+	http.ListenAndServe(":8080", c.Handler(router))
 }
