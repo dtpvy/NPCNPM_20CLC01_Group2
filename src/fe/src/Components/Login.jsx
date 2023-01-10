@@ -52,11 +52,12 @@ export default function Login() {
 								email: emailRef.current.value,
 								password: passwordRef.current.value,
 							};
-
+							localStorage.removeItem("access-token");
 							login(data)
 								.then((res) => {
 									console.log("success");
 									console.log(res);
+									localStorage.setItem("access-token", res.data.access_token);
 								})
 								.catch((err) => {
 									console.log("err");

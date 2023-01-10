@@ -1,7 +1,15 @@
 import axios from "axios";
 import { BASE_URL } from "../Constants/constant";
 
-export default function request({ path, baseUrl, params, data, headers, method }) {
+export default function request({
+	path,
+	baseUrl,
+	params,
+	data,
+	headers,
+	method,
+	// requireToken = false,
+}) {
 	const token = localStorage.getItem("access-token");
 	console.log({ token });
 	return new Promise((resolve, reject) => {
@@ -13,7 +21,7 @@ export default function request({ path, baseUrl, params, data, headers, method }
 				method,
 				data,
 				headers: {
-					"Content-Type": "application/x-www-form-urlencoded",
+					"Content-Type": "application/json",
 					...(token && { "access-token": token }),
 					...headers,
 				},

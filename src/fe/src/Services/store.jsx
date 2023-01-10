@@ -1,4 +1,6 @@
-serverData = {
+import request from "./request";
+
+const serverData = {
 	status: "SUCCESS",
 	errors: null,
 	data: {
@@ -105,4 +107,15 @@ serverData = {
 			},
 		],
 	},
+};
+
+export const getStoreInfo = (id) => {
+	return new Promise((resolve, reject) => {
+		request({
+			method: "get",
+			path: `store/info/${id}`,
+		})
+			.then((res) => resolve(res))
+			.catch((err) => reject(err));
+	});
 };

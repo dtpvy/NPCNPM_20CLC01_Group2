@@ -65,17 +65,15 @@ const ProductRow = ({ item, updater }) => {
 const Order = () => {
 	const dispatch = useDispatch();
 	const user = useSelector(getUserQuery);
-	const [cart, setCart] = useState(user.cart);
-
 	const data = useMemo(() => {
-		return cart.map((item) => {
+		return user.cart.map((item) => {
 			return { ...getProductById(item.id), amount: item.amount };
 		});
-	}, [cart]);
+	}, [user]);
 
 	useEffect(() => {
 		dispatch(getCartRedux());
-	});
+	}, []);
 
 	const updater = (type, id) => {
 		if (type === "increment") {

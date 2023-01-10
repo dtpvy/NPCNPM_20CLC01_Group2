@@ -61,7 +61,10 @@ export const updateUser = createAsyncThunk("user/updateUser", async (data) => {
 export const getCartRedux = createAsyncThunk("user/getCartRedux", async (data) => {
 	const d = await getCart()
 		.then((res) => res.data)
-		.catch((err) => console.log(err));
+		.catch((err) => {
+			console.log(err);
+			return [];
+		});
 	console.log(d);
 	return d;
 });
