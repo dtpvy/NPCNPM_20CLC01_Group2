@@ -30,7 +30,7 @@ func main() {
 	c := cors.New(cors.Options{
 		AllowedOrigins: []string{"*"},
 		AllowedMethods: []string{"GET", "POST", "DELETE", "PUT", "OPTIONS"},
-		AllowedHeaders: []string{"Origin", "X-Requested-With", "Content-Type, Accept", "X-Access-Token"},
+		AllowedHeaders: []string{"Origin", "X-Requested-With", "Content-Type, Accept", "X-Access-Token", "Content-Length", "Accept-Encoding", "Authorization", "X-CSRF-Token"},
 	})
 
 	http.ListenAndServe(":8080", c.Handler(router))
