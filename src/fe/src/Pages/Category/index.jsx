@@ -3,16 +3,20 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 import ProductBox from "../../Components/Home/Suggestion/ProductBox";
-import { getProductCategory } from "../../Services/product";
+import { getProductSearch } from "../../Services/product";
 
 export default function Category() {
 	const { id } = useParams();
 	const [searchProducts, setSearchProducts] = useState([]);
 
 	useEffect(() => {
-		setSearchProducts(getProductCategory(id));
+		getProductSearch(id).then((res) => {
+			console.log(res);
+			setSearchProducts(res.data);
+		});
 	}, []);
 
+	console.log(searchProducts);
 	const searchResults = searchProducts.map((thing, index) => {
 		return <ProductBox key={index} id={thing.id} title={thing.name} price={thing.price} />;
 	});

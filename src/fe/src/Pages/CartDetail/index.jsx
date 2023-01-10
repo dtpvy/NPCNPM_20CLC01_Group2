@@ -5,7 +5,7 @@ import product_1 from "../../components/Images/product-1.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
-import { getUserQuery, updateCart } from "../../app/slice/userSlice";
+import { getCartRedux, getUserQuery, updateCart } from "../../app/slice/userSlice";
 
 import { getProductById } from "../../Services/product";
 
@@ -72,6 +72,10 @@ const Order = () => {
 			return { ...getProductById(item.id), amount: item.amount };
 		});
 	}, [cart]);
+
+	useEffect(() => {
+		dispatch(getCartRedux());
+	});
 
 	const updater = (type, id) => {
 		if (type === "increment") {

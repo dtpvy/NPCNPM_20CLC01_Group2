@@ -1,5 +1,4 @@
 import axios from "axios";
-import queryString from "query-string";
 import { BASE_URL } from "../Constants/constant";
 
 export default function request({ path, baseUrl, params, data, headers, method }) {
@@ -14,7 +13,7 @@ export default function request({ path, baseUrl, params, data, headers, method }
 				method,
 				data,
 				headers: {
-					"Content-Type": "application/json",
+					"Content-Type": "application/x-www-form-urlencoded",
 					...(token && { "access-token": token }),
 					...headers,
 				},

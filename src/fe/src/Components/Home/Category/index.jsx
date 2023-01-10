@@ -11,7 +11,7 @@ export default function Category() {
 			console.log(res);
 			setCategories(
 				res.data.map((item) => {
-					return <CategoryBox key={item.id} id={item.id} title={item.name} />;
+					return <CategoryBox key={item.id} id={item.id} title={item.title} />;
 				})
 			);
 		});

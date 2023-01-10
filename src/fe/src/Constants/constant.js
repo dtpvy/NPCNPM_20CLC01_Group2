@@ -1,4 +1,4 @@
 export const BASE_URL = {
-  dev: "http://webanhang-dev.onrender.com",
-  prod: "http://webanhang.onrender.com",
+	dev: "https://webanhang-dev.onrender.com",
+	prod: "https://webanhang.onrender.com",
 };

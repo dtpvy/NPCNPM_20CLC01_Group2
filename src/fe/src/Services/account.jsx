@@ -1,35 +1,25 @@
 import request from "./request";
 
-// export async function loginAPI({ email, password }) {
-//   try {
-//     const res = await request({
-//       path: "auth/login",
-//       method: "post",
-//       data: {
-//         email,
-//         password,
-//       },
-//     });
-//     return res.data;
-//   } catch (err) {
-//     console.log(err);
-//     return null;
-//   }
-// }
-
-export async function login({ email, password }) {
-	try {
-		const res = await request({
+export function login({ email, password }) {
+	return new Promise((resolve, reject) => {
+		request({
 			path: "auth/login",
 			method: "post",
-			data: {
-				email,
-				password,
-			},
-		});
-		return res.data;
-	} catch (err) {
-		console.log(err);
-		return null;
-	}
+			data: { email, password },
+		})
+			.then((res) => resolve(res))
+			.catch((err) => reject(err));
+	});
 }
+
+export const register = (data) => {
+	return new Promise((resolve, reject) => {
+		request({
+			path: "auth/register",
+			method: "post",
+			data,
+		})
+			.then((res) => resolve(res))
+			.catch((err) => reject(err));
+	});
+};

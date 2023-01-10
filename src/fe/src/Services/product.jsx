@@ -52,6 +52,24 @@ const data = [
 	{ id: "9", name: "Jack 05", price: 10000000, sold: 69, category_id: "3" },
 ];
 
+export const getProductSearch = (category_id) => {
+	return new Promise((resolve, reject) => {
+		request({
+			method: "get",
+			path: "product/search",
+			params: { sort: "asc", st: "name", page: 0, limit: 1000, category: category_id },
+		})
+			.then((res) => {
+				console.log("success");
+				resolve(res);
+			})
+			.catch(() => {
+				console.log("error");
+				resolve({ status: "DEFAULT", data: [] });
+			});
+	});
+};
+
 export const getProductById = (id) => {
 	id = id.toString();
 	return data.find((item) => {
@@ -61,8 +79,4 @@ export const getProductById = (id) => {
 
 export const getAllProduct = () => {
 	return data;
-};
-
-export const getProductCategory = (category_id) => {
-	return data.filter((item) => item.category_id === category_id);
 };

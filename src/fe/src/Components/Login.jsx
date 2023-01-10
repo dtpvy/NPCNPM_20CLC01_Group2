@@ -52,8 +52,16 @@ export default function Login() {
 								email: emailRef.current.value,
 								password: passwordRef.current.value,
 							};
-							console.log(data);
-							login(data);
+
+							login(data)
+								.then((res) => {
+									console.log("success");
+									console.log(res);
+								})
+								.catch((err) => {
+									console.log("err");
+									console.log(err);
+								});
 						}}>
 						Đăng nhập
 					</button>

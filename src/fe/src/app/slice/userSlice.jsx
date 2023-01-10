@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { getCart } from "../../Services/cart";
 
 const userInfo = {
 	status: "SUCCESS",
@@ -57,6 +58,14 @@ export const updateUser = createAsyncThunk("user/updateUser", async (data) => {
 	return data;
 });
 
+export const getCartRedux = createAsyncThunk("user/getCartRedux", async (data) => {
+	const d = await getCart()
+		.then((res) => res.data)
+		.catch((err) => console.log(err));
+	console.log(d);
+	return d;
+});
+
 export const addProductToCart = createAsyncThunk("user/addProductToCart", async (data) => {
 	return data;
 });
@@ -95,6 +104,9 @@ const userSlice = createSlice({
 				console.log("creating order");
 				state.data.order = [...state.data.order, action.payload];
 				state.data.cart = [];
+			})
+			.addCase(getCartRedux.fulfilled, (state, action) => {
+				state.data.cart = [...action.payload];
 			});
 	},
 });
