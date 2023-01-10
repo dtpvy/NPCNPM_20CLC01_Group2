@@ -11,10 +11,6 @@ import (
 )
 
 func main() {
-	c := cors.New(cors.Options{
-		AllowedOrigins: []string{"*"},
-	})
-
 	router := httprouter.New()
 	routes.AuthRouter(router)
 	routes.UserRouter(router)
@@ -30,5 +26,6 @@ func main() {
 	// router.GET("/home/product/", routes.Register)
 
 	fmt.Println("Server start with port 8080")
-	http.ListenAndServe(":8080", c.Handler(router))
+	handler := cors.Default().Handler(router)
+	http.ListenAndServe(":8080", handler)
 }
