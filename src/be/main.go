@@ -28,9 +28,10 @@ func main() {
 	fmt.Println("Server start with port 8080")
 
 	c := cors.New(cors.Options{
-		AllowedOrigins: []string{"*"},
-		AllowedMethods: []string{"GET", "POST", "DELETE", "PUT", "OPTIONS"},
-		AllowedHeaders: []string{"Origin", "X-Requested-With", "Content-Type, Accept", "X-Access-Token", "Content-Length", "Accept-Encoding", "Authorization", "X-CSRF-Token"},
+		AllowedOrigins:   []string{"*"},
+		AllowCredentials: true,
+		AllowedMethods:   []string{"GET", "POST", "DELETE", "PUT", "OPTIONS"},
+		AllowedHeaders:   []string{"Origin", "X-Requested-With", "Content-Type", "Accept", "X-Access-Token", "Content-Length", "Accept-Encoding", "Authorization"},
 	})
 
 	http.ListenAndServe(":8080", c.Handler(router))
