@@ -10,7 +10,7 @@ func AddHeader(next httprouter.Handle) httprouter.Handle {
 	return httprouter.Handle(func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
-		w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, Custom-Token")
+		w.Header().Set("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, X-Access-Token")
 		next(w, r, p)
 	})
 }
