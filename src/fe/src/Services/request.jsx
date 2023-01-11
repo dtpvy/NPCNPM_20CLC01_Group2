@@ -20,11 +20,17 @@ export default function request({
 				params,
 				method,
 				data,
-				headers: {
-					"Content-Type": "application/json",
-					...(token && { "access-token": token }),
-					...headers,
-				},
+				headers:
+					token !== null
+						? {
+								"Content-Type": "application/json",
+								"X-Access-Token": token,
+								...headers,
+						  }
+						: {
+								"Content-Type": "application/json",
+								...headers,
+						  },
 			})
 			.then((res) => {
 				resolve(res.data);

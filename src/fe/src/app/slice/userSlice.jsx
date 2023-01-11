@@ -65,6 +65,7 @@ export const getCartRedux = createAsyncThunk("user/getCartRedux", async (data) =
 			console.log(err);
 			return [];
 		});
+	console.log("result of get cart");
 	console.log(d);
 	return d;
 });
@@ -109,7 +110,7 @@ const userSlice = createSlice({
 				state.data.cart = [];
 			})
 			.addCase(getCartRedux.fulfilled, (state, action) => {
-				state.data.cart = [...action.payload];
+				// state.data.cart = [...action.payload];
 			});
 	},
 });

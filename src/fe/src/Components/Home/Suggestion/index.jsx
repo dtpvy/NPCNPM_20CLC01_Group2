@@ -1,11 +1,16 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
-import { getAllProduct } from "../../../Services/product";
-
+import { getProductSearch } from "../../../Services/product";
 import ProductBox from "./ProductBox";
 
 export default function Suggestion() {
-	const suggestions = getAllProduct();
+	const [suggestions, setSuggestion] = useState([]);
+	useEffect(() => {
+		getProductSearch("e8e05e61-9244-4057-b5c9-6c9834364979").then((res) => {
+			console.log(res);
+			setSuggestion(res.data.splice(0, 8));
+		});
+	}, []);
 
 	const Suggestions = suggestions.map((thing, index) => {
 		return <ProductBox key={index} id={thing.id} title={thing.name} price={thing.price} />;

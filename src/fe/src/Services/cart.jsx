@@ -10,3 +10,17 @@ export const getCart = () => {
 			.catch((err) => reject(err));
 	});
 };
+
+export const removeProductCart = (product_id) => {
+	return new Promise((resolve, reject) => {
+		request({
+			path: "cart/remove_product",
+			method: "delete",
+			data: {
+				product_id,
+			},
+		})
+			.then((res) => resolve(res))
+			.catch((err) => reject(err));
+	});
+};

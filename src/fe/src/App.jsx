@@ -27,7 +27,7 @@ const App = () => {
 				<Route path="profile">
 					<Route index element={<Profile />} /> {/*fixed*/}
 					<Route path="edit" element={<EditProfile />} /> {/*fixed*/}
-					<Route path="seller-profile" element={<SellerProfile />} /> {/*semi-fixed*/}
+					<Route path="seller-profile/:id" element={<SellerProfile />} /> {/*semi-fixed*/}
 					<Route path="store" element={<Store />} />
 				</Route>
 				<Route path="category/:id" element={<Category />} /> {/*???*/}

@@ -15,7 +15,7 @@ export const updateStatusOrder = (order_id, status, is_seller) => {
 	return new Promise((resolve, reject) => {
 		request({
 			method: "put",
-			path: `order/update/${id}`,
+			path: `order/update/${order_id}`,
 			data: {
 				status,
 				is_seller,

@@ -8,16 +8,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { getCartRedux, getUserQuery, updateCart } from "../../app/slice/userSlice";
 
 import { getProductById } from "../../Services/product";
+import { getCart } from "../../Services/cart";
 
-const ProductRow = ({ item, updater }) => {
+const ProductRow = ({ item }) => {
+	const data = item.items[0];
 	return (
 		<>
 			<div className="col-span-3 flex gap-4 items-center">
 				<div className="">
-					<img className="w-24 aspect-square" src={""} alt={""} />
+					<img className="w-24 aspect-square" src={data.image} alt={"cannot load image"} />
 				</div>
 				<div className="">
-					<div className="font-bold text-sm">{item.title}</div>
+					<div className="font-bold text-sm">{data.name}</div>
 					<div className="text-red-500 text-xs">Gaomon</div>
 					<div
 						className="font-semibold hover:text-red-500 text-gray-500 text-xs cursor-pointer"
@@ -29,71 +31,44 @@ const ProductRow = ({ item, updater }) => {
 				</div>
 			</div>
 
-			<div className="flex items-center justify-center">
-				<div
-					className="border-2 border-slate-500 px-2 cursor-pointer bg-blue-200 hover:bg-blue-300 rounded-l-md select-none"
-					type="button"
-					onClick={() => {
-						updater("decrement", item.id);
-					}}>
-					-
-				</div>
-				<span className="text-center border-solid border-2 border-gray-800 border-x-0">
-					<input
-						className="w-10 text-center"
-						type="text"
-						name="qty-input"
-						value={item.amount}
-						onChange={(e) => {}}
-					/>
-				</span>
-				<button
-					className="border-2 border-slate-500 bg-blue-200 px-2 cursor-pointer hover:bg-blue-300 rounded-r-md select-none"
-					type="button"
-					onClick={() => {
-						updater("increment", item.id);
-					}}>
-					+
-				</button>
-			</div>
-			<span className="flex items-center font-semibold text-sm">{item.price}</span>
-			<span className="flex items-center font-semibold text-sm">{item.price * item.amount}</span>
+			<div className="flex items-center justify-center">{data.quantity}</div>
+			<span className="flex items-center font-semibold text-sm">{data.price}</span>
+			<span className="flex items-center font-semibold text-sm">{data.price * data.quantity}</span>
 		</>
 	);
 };
 
 const Order = () => {
+	const [data, setData] = useState({ sellers: [] });
 	const dispatch = useDispatch();
-	const user = useSelector(getUserQuery);
-	const data = useMemo(() => {
-		return user.cart.map((item) => {
-			return { ...getProductById(item.id), amount: item.amount };
-		});
-	}, [user]);
-
 	useEffect(() => {
-		dispatch(getCartRedux());
+		getCart()
+			.then((res) => {
+				console.log(res);
+				setData(res.data);
+			})
+			.catch((err) => console.log(err));
 	}, []);
 
-	const updater = (type, id) => {
-		if (type === "increment") {
-			setCart((prev) =>
-				prev.map((item) => {
-					if (item.id !== id) return item;
-					return { id: item.id, amount: item.amount + 1 };
-				})
-			);
-		} else if (type === "decrement") {
-			setCart((prev) =>
-				prev.map((item) => {
-					if (item.id !== id) return item;
-					return { id: item.id, amount: item.amount - 1 < 0 ? 0 : item.amount - 1 };
-				})
-			);
-		} else if (type === "delete") {
-			setCart((prev) => prev.filter((item) => item.id !== id));
-		}
-	};
+	// const updater = (type, id) => {
+	// 	if (type === "increment") {
+	// 		setCart((prev) =>
+	// 			prev.map((item) => {
+	// 				if (item.id !== id) return item;
+	// 				return { id: item.id, amount: item.amount + 1 };
+	// 			})
+	// 		);
+	// 	} else if (type === "decrement") {
+	// 		setCart((prev) =>
+	// 			prev.map((item) => {
+	// 				if (item.id !== id) return item;
+	// 				return { id: item.id, amount: item.amount - 1 < 0 ? 0 : item.amount - 1 };
+	// 			})
+	// 		);
+	// 	} else if (type === "delete") {
+	// 		setCart((prev) => prev.filter((item) => item.id !== id));
+	// 	}
+	// };
 
 	const navigate = useNavigate();
 
@@ -119,8 +94,8 @@ const Order = () => {
 							<h3 className="font-semibold text-slate-500 text-xs uppercase">Đơn giá</h3>
 							<h3 className="font-semibold text-slate-500 text-xs uppercase">Thành tiền</h3>
 
-							{data.map((item, i) => {
-								return <ProductRow key={i} item={item} updater={updater} />;
+							{data.sellers.map((item, i) => {
+								return <ProductRow key={i} item={item} />;
 							})}
 						</div>
 

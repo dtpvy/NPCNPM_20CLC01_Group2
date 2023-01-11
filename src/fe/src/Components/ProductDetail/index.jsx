@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { useNavigate, useParams } from "react-router-dom";
@@ -9,15 +10,20 @@ import { addProductToCart, getUserQuery } from "../../app/slice/userSlice";
 import { getProductById } from "../../Services/product";
 
 const ProductDetail = () => {
-	const user = useSelector(getUserQuery);
-	const cart = user.cart;
-
 	const dispatch = useDispatch();
-	const { id } = useParams();
-	const data = getProductById(id);
-
 	const navigate = useNavigate();
+	const { id } = useParams();
 	const [amount, setAmount] = useState(1);
+	const [data, setData] = useState({});
+
+	useEffect(() => {
+		getProductById(id)
+			.then((res) => {
+				console.log(res);
+				setData(res.data);
+			})
+			.catch((err) => console.log(err));
+	}, []);
 
 	return (
 		<div className="grid grid-cols-[1fr_2fr] gap-x-3">
@@ -33,8 +39,7 @@ const ProductDetail = () => {
 							<span className="text-red-500 text-3xl font-bold">{data.price} vnđ</span>
 						</div>
 						<div className="mx-2">
-							<div className="mb-3">Giao đến:</div>
-							<div>Q.7, Phú Thuận, Tp.HCM</div>
+							<div>{data.description}</div>
 						</div>
 						<div className="mx-2">
 							<div className="mb-3">Số lượng:</div>
@@ -62,7 +67,7 @@ const ProductDetail = () => {
 						</div>
 					</div>
 					<button
-						className="mx-2 bg-red-500 px-5 py-2 rounded-md w-36 text-white hover:bg-red-400 hover:scale-110 duration-300"
+						className="mx-2 mt-5 bg-red-500 px-5 py-2 rounded-md w-36 text-white hover:bg-red-400 hover:scale-110 duration-300"
 						onClick={() => {
 							if (cart.findIndex((item) => item.id === id) === -1) {
 								dispatch(addProductToCart({ id, amount }))
@@ -94,7 +99,7 @@ const ProductDetail = () => {
 							<button
 								className="border-blue-500 text-blue-500 border-2 w-full py-1 rounded-lg font-bold hover:bg-blue-300 hover:scale-105 duration-300"
 								onClick={() => {
-									navigate("/profile/seller-profile");
+									navigate(`/profile/seller-profile/${data.creator_id}`);
 								}}>
 								Xem shop
 							</button>

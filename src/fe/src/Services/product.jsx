@@ -71,9 +71,13 @@ export const getProductSearch = (category_id) => {
 };
 
 export const getProductById = (id) => {
-	id = id.toString();
-	return data.find((item) => {
-		return item.id.toString() === id.toString();
+	return new Promise((resolve, reject) => {
+		request({
+			method: "get",
+			path: `product/detail/${id}`,
+		})
+			.then((res) => resolve(res))
+			.catch((err) => reject(err));
 	});
 };
 
