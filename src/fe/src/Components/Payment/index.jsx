@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { createOrder, getUserQuery } from "../../app/slice/userSlice";
-import { getProductById } from "../../Services/product";
+import { cleanCart, getCart } from "../../Services/cart";
+import { createOrder } from "../../Services/order";
+import { getUserInfo } from "../../Services/account";
 
 const Modal = ({ background, toggler }) => {
 	return (
@@ -19,16 +19,31 @@ const Modal = ({ background, toggler }) => {
 };
 
 const Payment = () => {
-	const user = useSelector(getUserQuery);
-	const dispatch = useDispatch();
-	const data = useMemo(() => {
-		const cart = user.cart;
-		return cart.map((item) => {
-			return { ...getProductById(item.id), amount: item.amount };
-		});
-	}, [user]);
-
+	const [data, setData] = useState([]);
+	const [user, setUser] = useState({});
+	const [total, setTotal] = useState(0);
 	const navigate = useNavigate();
+
+	useEffect(() => {
+		getCart()
+			.then((res) => {
+				console.log(res);
+				const products = [];
+				res.data.sellers.map((i) => {
+					i.items.map((item) => {
+						products.push(item);
+						setTotal((prev) => prev + item.quantity * item.price);
+					});
+				});
+				setData(products);
+			})
+			.catch((err) => console.log(err));
+		getUserInfo()
+			.then((res) => {
+				setUser(res.data);
+			})
+			.catch((err) => console.log(err));
+	}, []);
 
 	const [showModal, setShowModal] = useState(false);
 	const [modalIndex, setModalIndex] = useState(0);
@@ -67,8 +82,8 @@ const Payment = () => {
 										</div>
 										<div className="text-slate-500"></div>
 										<div>{`${item.price}`}</div>
-										<div>{item.amount}</div>
-										<div className="flex justify-end">{item.price * item.amount}</div>
+										<div>{item.quantity}</div>
+										<div className="flex justify-end">{item.price * item.quantity}</div>
 									</div>
 								);
 							})}
@@ -77,11 +92,7 @@ const Payment = () => {
 						<div className="w-full h-1 bg-blue-400 my-4 rounded-lg col-span-5"></div>
 						<div className="col-start-5 col-span-1 flex justify-between">
 							<div className="text-slate-500 col-span-4">Tổng cộng:</div>
-							<div className="font-semibold flex justify-end">
-								{data.reduce((total, item) => {
-									return total + item.price * item.amount;
-								}, 0)}
-							</div>
+							<div className="font-semibold flex justify-end">{total}</div>
 						</div>
 
 						<div className="col-span-5 flex justify-end">
@@ -91,14 +102,11 @@ const Payment = () => {
 							<div
 								className="px-4 py-2 bg-sky-600 text-white rounded-md cursor-pointer hover:scale-110 hover:bg-sky-800 duration-300"
 								onClick={() => {
-									//
-									const order = {
-										package: user.cart.map((item) => {
-											return { id: item.id, amount: item.amount, status: "resolving" };
-										}),
-									};
-									dispatch(createOrder(order));
-									navigate("/order");
+									createOrder({ address: user.address, phone: user.phone })
+										.then((res) => {
+											navigate("/order");
+										})
+										.catch((err) => console.log(err));
 								}}>
 								Thanh toán
 							</div>

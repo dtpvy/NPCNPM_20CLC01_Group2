@@ -4,43 +4,47 @@ import { useNavigate } from "react-router-dom";
 // import product_1 from "../../components/Images/product-1.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { useDispatch, useSelector } from "react-redux";
-import { getCartRedux, getUserQuery, updateCart } from "../../app/slice/userSlice";
 
-import { getProductById } from "../../Services/product";
-import { getCart } from "../../Services/cart";
+import { getCart, removeProductCart } from "../../Services/cart";
 
 const ProductRow = ({ item }) => {
+	const [visible, setVisible] = useState(true);
 	const data = item.items[0];
 	return (
-		<>
-			<div className="col-span-3 flex gap-4 items-center">
-				<div className="">
-					<img className="w-24 aspect-square" src={data.image} alt={"cannot load image"} />
-				</div>
-				<div className="">
-					<div className="font-bold text-sm">{data.name}</div>
-					<div className="text-red-500 text-xs">Gaomon</div>
-					<div
-						className="font-semibold hover:text-red-500 text-gray-500 text-xs cursor-pointer"
-						onClick={() => {
-							updater("delete", item.id);
-						}}>
-						Xóa
+		visible && (
+			<>
+				<div className="col-span-3 flex gap-4 items-center">
+					<div className="">
+						<img className="w-24 aspect-square" src={data.image} alt={"cannot load image"} />
+					</div>
+					<div className="">
+						<div className="font-bold text-sm">{data.name}</div>
+						<div
+							className="font-semibold hover:text-red-500 text-gray-500 text-xs cursor-pointer"
+							onClick={() => {
+								removeProductCart(data.id)
+									.then((res) => {
+										setVisible(false);
+									})
+									.catch((err) => console.log(err));
+							}}>
+							Xóa
+						</div>
 					</div>
 				</div>
-			</div>
 
-			<div className="flex items-center justify-center">{data.quantity}</div>
-			<span className="flex items-center font-semibold text-sm">{data.price}</span>
-			<span className="flex items-center font-semibold text-sm">{data.price * data.quantity}</span>
-		</>
+				<div className="flex items-center justify-center">{data.quantity}</div>
+				<span className="flex items-center font-semibold text-sm">{data.price}</span>
+				<span className="flex items-center font-semibold text-sm">
+					{data.price * data.quantity}
+				</span>
+			</>
+		)
 	);
 };
 
 const Order = () => {
 	const [data, setData] = useState({ sellers: [] });
-	const dispatch = useDispatch();
 	useEffect(() => {
 		getCart()
 			.then((res) => {
@@ -49,26 +53,6 @@ const Order = () => {
 			})
 			.catch((err) => console.log(err));
 	}, []);
-
-	// const updater = (type, id) => {
-	// 	if (type === "increment") {
-	// 		setCart((prev) =>
-	// 			prev.map((item) => {
-	// 				if (item.id !== id) return item;
-	// 				return { id: item.id, amount: item.amount + 1 };
-	// 			})
-	// 		);
-	// 	} else if (type === "decrement") {
-	// 		setCart((prev) =>
-	// 			prev.map((item) => {
-	// 				if (item.id !== id) return item;
-	// 				return { id: item.id, amount: item.amount - 1 < 0 ? 0 : item.amount - 1 };
-	// 			})
-	// 		);
-	// 	} else if (type === "delete") {
-	// 		setCart((prev) => prev.filter((item) => item.id !== id));
-	// 	}
-	// };
 
 	const navigate = useNavigate();
 
@@ -80,7 +64,8 @@ const Order = () => {
 						<div className="flex justify-between">
 							<h1 className="font-semibold text-2xl">Giỏ hàng</h1>
 							<h2 className="font-semibold text-2xl">
-								<span className="text-xl text-slate-500">Tổng cộng: </span>3
+								<span className="text-xl text-slate-500">Tổng cộng: </span>
+								{data.sellers.length}
 							</h2>
 						</div>
 						<div className="grid grid-cols-6 gap-y-5 gap-x-2 mt-8">
@@ -112,20 +97,27 @@ const Order = () => {
 							<div className="w-full h-0.5 bg-slate-200"></div>
 							<div className="flex justify-between items-center">
 								<span className="font-semibold text-slate-500">Số món hàng:</span>
-								<span className="font-semibold">3</span>
+								<span className="font-semibold">{data.sellers.length}</span>
 							</div>
 							<div className="">
 								<div className="flex justify-between items-center">
 									<span className="font-semibold text-slate-500">Tổng tiền</span>
-									<span className="font-semibold">1 800 000 vnđ</span>
+									<span className="font-semibold">
+										{data.sellers.reduce((total, item) => {
+											return total + item.items[0].price * item.items[0].quantity;
+										}, 0)}
+									</span>
 								</div>
 							</div>
 
 							<button
 								className="bg-indigo-500 font-semibold hover:bg-indigo-800 hover:scale-105 duration-300 py-3 text-white rounded-md"
 								onClick={() => {
-									dispatch(updateCart(cart));
-									navigate("/payment");
+									if (data.sellers.length !== 0) {
+										navigate("/payment");
+									} else {
+										alert("Giỏ hàng trống");
+									}
 								}}>
 								Mua hàng
 							</button>

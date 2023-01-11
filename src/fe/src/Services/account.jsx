@@ -23,3 +23,26 @@ export const register = (data) => {
 			.catch((err) => reject(err));
 	});
 };
+
+export const getUserInfo = () => {
+	return new Promise((resolve, reject) => {
+		request({
+			path: "user_info",
+			method: "get",
+		})
+			.then((res) => resolve(res))
+			.catch((err) => reject(err));
+	});
+};
+
+export const updateUserInfo = (data) => {
+	return new Promise((resolve, reject) => {
+		request({
+			method: "put",
+			path: "user_info/update",
+			data,
+		})
+			.then((res) => resolve(res))
+			.catch((err) => reject(err));
+	});
+};

@@ -1,7 +1,34 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { getUserInfo } from "../../Services/account";
+import { cleanCart, getCart } from "../../Services/cart";
 // import productImg from "../../components/Images/product-1.png";
 
 const Order = () => {
+	const [user, setUser] = useState({});
+	const [cart, setCart] = useState([]);
+	useEffect(() => {
+		getUserInfo()
+			.then((res) => setUser(res.data))
+			.catch((err) => console.log(err));
+		getCart()
+			.then((res) => {
+				const products = [];
+				res.data.sellers.map((i) => {
+					i.items.map((item) => {
+						products.push(item);
+					});
+				});
+				setCart(products);
+
+				cleanCart()
+					.then((res) => {})
+					.catch((err) => console.log(err));
+			})
+			.catch((err) => console.log(err));
+	}, []);
+
+	console.log(user);
+
 	return (
 		<div className="flex flex-col gap-4">
 			{/* Information of customer */}
@@ -12,15 +39,15 @@ const Order = () => {
 					<ul className="bg-white px-5 py-2 h-32 flex flex-col justify-center items-start">
 						<li>
 							<span className="text-slate-400 inline-block w-32">Tên người nhận:</span>
-							Vy Do
+							{user.fullname}
 						</li>
 						<li>
 							<span className="text-slate-400 inline-block w-32">Địa chỉ:</span>
-							227 Nguyễn Văn Cừ, quận 5
+							{user.address}
 						</li>
 						<li>
 							<span className="text-slate-400 inline-block w-32">Số điện thoại:</span>
-							0349732872
+							{user.phone}
 						</li>
 					</ul>
 				</div>
@@ -36,7 +63,7 @@ const Order = () => {
 							<span className="text-slate-400 inline-block w-28">Được giao bởi:</span> NGUYENVUSTORE
 						</li>
 						<li>
-							<span className="text-slate-400 inline-block w-28">Phí vận chuyển:</span> 12.000đ
+							<span className="text-slate-400 inline-block w-28">Phí vận chuyển:</span> 14000
 						</li>
 					</ul>
 				</div>
@@ -44,10 +71,7 @@ const Order = () => {
 				<div className="flex flex-col gap-2">
 					<div className="font-semibold text-2xl">HÌNH THỨC THANH TOÁN</div>
 					<ul className="bg-white px-5 py-3 h-32 flex flex-col justify-center items-start">
-						<li>Thanh toán bằng ví Moca | Grab</li>
-						<li>
-							<i>Thanh toán thành công</i>
-						</li>
+						<li>Thanh toán bằng tiền mặt</li>
 					</ul>
 				</div>
 			</div>
@@ -61,90 +85,68 @@ const Order = () => {
 					<div className="text-slate-400 text-lg text-right pr-8">Tạm tính</div>
 					<div className="col-span-8 w-full h-0.5 bg-slate-300"></div>
 				</div>
-				<div className="w-full p-5 grid grid-cols-8 gap-y-8">
-					<div className="flex gap-2 col-span-4">
-						<div className="">
-							{/* image of product */}
-							<img
-								className="w-24 aspect-square object-cover"
-								src={""}
-								alt="Bảng Vẽ Điện Tử Gaomon 1060Pro - 10x6 inch"
-							/>
-						</div>
+				{cart.map((item) => {
+					return (
+						<div className="w-full p-5 grid grid-cols-8 gap-y-8" key={item.id}>
+							<div className="flex gap-2 col-span-4">
+								<div className="">
+									{/* image of product */}
+									<img
+										className="w-24 aspect-square object-cover"
+										src={item.image}
+										alt="cannot load"
+									/>
+								</div>
 
-						<div className="flex flex-col justify-between mx-2">
-							{/* Name product & describe */}
-							<div className="text-lg font-semibold hover:text-blue-500 hover:underline hover:underline-offset-4 cursor-pointer">
-								Bảng Vẽ Điện Tử Gaomon 1060Pro - 10x6 inch
+								<div className="flex flex-col justify-between mx-2">
+									{/* Name product & describe */}
+									<div className="text-lg font-semibold hover:text-blue-500 hover:underline hover:underline-offset-4 cursor-pointer">
+										{item.name}
+									</div>
+									<p>Cung cấp bởi Tiki Trading</p>
+									<div className="flex gap-3 items-center">
+										<span className="border-2 border-slate-500 px-2 py-1 rounded-md cursor-pointer hover:bg-blue-500 hover:text-white duration-150 hover:scale-105">
+											Chat với người bán
+										</span>
+										<span className="border-2 border-slate-500 px-2 py-1 rounded-md cursor-pointer hover:bg-blue-500 hover:text-white duration-150 hover:scale-105">
+											Viết nhận xét
+										</span>
+										<span className="border-2 border-slate-500 px-2 py-1 rounded-md cursor-pointer hover:bg-blue-500 hover:text-white duration-150 hover:scale-105">
+											Mua lại
+										</span>
+									</div>
+								</div>
 							</div>
-							<p>Cung cấp bởi Tiki Trading</p>
-							<div className="flex gap-3 items-center">
-								<span className="border-2 border-slate-500 px-2 py-1 rounded-md cursor-pointer hover:bg-blue-500 hover:text-white duration-150 hover:scale-105">
-									Chat với người bán
-								</span>
-								<span className="border-2 border-slate-500 px-2 py-1 rounded-md cursor-pointer hover:bg-blue-500 hover:text-white duration-150 hover:scale-105">
-									Viết nhận xét
-								</span>
-								<span className="border-2 border-slate-500 px-2 py-1 rounded-md cursor-pointer hover:bg-blue-500 hover:text-white duration-150 hover:scale-105">
-									Mua lại
-								</span>
-							</div>
+							<div className="font-semibold">{item.price}</div>
+							<div>{item.quantity}</div>
+							<div>0 đ</div>
+							<div className="text-right pr-8">{item.price * item.quantity}</div>
 						</div>
-					</div>
-					<div className="font-semibold">92.000 đ</div>
-					<div>1</div>
-					<div>0 đ</div>
-					<div className="text-right pr-8">92.000 đ</div>
+					);
+				})}
 
-					<div className="flex gap-2 col-span-4">
-						<div className="">
-							{/* image of product */}
-							<img
-								className="w-24 aspect-square object-cover"
-								src={""}
-								alt="Bảng Vẽ Điện Tử Gaomon 1060Pro - 10x6 inch"
-							/>
-						</div>
-
-						<div className="flex flex-col justify-between mx-2">
-							{/* Name product & describe */}
-							<div className="text-lg font-semibold hover:text-blue-500 hover:underline hover:underline-offset-4 cursor-pointer">
-								Bảng Vẽ Điện Tử Gaomon 1060Pro - 10x6 inch
-							</div>
-							<p>Cung cấp bởi Tiki Trading</p>
-							<div className="flex gap-3 items-center">
-								<span className="border-2 border-slate-500 px-2 py-1 rounded-md cursor-pointer hover:bg-blue-500 hover:text-white duration-150 hover:scale-110">
-									Chat với người bán
-								</span>
-								<span className="border-2 border-slate-500 px-2 py-1 rounded-md cursor-pointer hover:bg-blue-500 hover:text-white duration-150 hover:scale-110">
-									Viết nhận xét
-								</span>
-								<span className="border-2 border-slate-500 px-2 py-1 rounded-md cursor-pointer hover:bg-blue-500 hover:text-white duration-150 hover:scale-110">
-									Mua lại
-								</span>
-							</div>
-						</div>
-					</div>
-					<div className="font-semibold">92.000 đ</div>
-					<div>1</div>
-					<div>0 đ</div>
-					<div className="text-right pr-8">92.000 đ</div>
-					<div className="col-span-8 w-full h-1 bg-blue-300"></div>
-				</div>
 				<div className="w-full p-5 grid grid-cols-8 gap-y-3">
 					<div className="col-span-7 flex flex-col gap-2 items-end pr-3 font-semibold">
 						Tạm tính:
 					</div>
-					<div className="text-right pr-8">207.000 đ</div>
+					<div className="text-right pr-8">
+						{cart.reduce((total, item) => {
+							return total + item.quantity * item.price;
+						}, 0)}
+					</div>
 
 					<div className="col-span-7 flex flex-col gap-2 items-end pr-3 font-semibold">
 						Phí vận chuyển:
 					</div>
-					<div className="text-right pr-8">14.000 đ</div>
+					<div className="text-right pr-8">{14000}</div>
 					<div className="col-span-7 flex flex-col gap-2 items-end pr-3 font-semibold">
 						Tổng cộng:
 					</div>
-					<div className="text-right pr-8">221.000 đ</div>
+					<div className="text-right pr-8">
+						{cart.reduce((total, item) => {
+							return total + item.quantity * item.price;
+						}, 0) + 14000}
+					</div>
 				</div>
 			</div>
 		</div>

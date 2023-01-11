@@ -81,6 +81,18 @@ export const getProductById = (id) => {
 	});
 };
 
+export const createProduct = (data) => {
+	return new Promise((resolve, reject) => {
+		request({
+			method: "post",
+			path: "store/product/create",
+			data: data,
+		})
+			.then((res) => resolve(res))
+			.catch((err) => reject(err));
+	});
+};
+
 export const getAllProduct = () => {
 	return data;
 };

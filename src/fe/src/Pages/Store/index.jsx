@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { getOrderSeller, updateStatusOrder } from "../../Services/order";
 import { getStoreInfo } from "../../Services/store";
 
@@ -49,6 +50,7 @@ const Orders = ({ data }) => {
 };
 
 const Store = () => {
+	const navigate = useNavigate();
 	const [tab, setTab] = useState("product");
 	const [productData, setProductData] = useState({ products: [] });
 	const [orderData, setOrderData] = useState([]);
@@ -78,26 +80,37 @@ const Store = () => {
 
 	return (
 		<>
-			<div className="flex">
-				<div
-					className="px-4 py-3 cursor-pointer hover:bg-slate-300"
-					style={{ backgroundColor: tab === "product" ? "white" : "" }}
-					onClick={() => {
-						setTab("product");
-					}}>
-					Sản phẩm của tôi
+			<div className="flex justify-between">
+				<div className="flex">
+					<div
+						className="px-4 py-3 cursor-pointer hover:bg-slate-300"
+						style={{ backgroundColor: tab === "product" ? "white" : "" }}
+						onClick={() => {
+							setTab("product");
+						}}>
+						Sản phẩm của tôi
+					</div>
+					<div
+						className="px-4 py-3 cursor-pointer hover:bg-slate-300"
+						style={{ backgroundColor: tab === "order" ? "white" : "" }}
+						onClick={() => {
+							setTab("order");
+						}}>
+						Đơn hàng của tôi
+					</div>
 				</div>
 				<div
-					className="px-4 py-3 cursor-pointer hover:bg-slate-300"
-					style={{ backgroundColor: tab === "order" ? "white" : "" }}
+					className="bg-sky-500 px-2 h-9 flex items-center justify-center rounded-md cursor-pointer hover:bg-sky-700 text-white hover:scale-105 duration-150"
 					onClick={() => {
-						setTab("order");
+						navigate("/add-product");
 					}}>
-					Đơn hàng của tôi
+					Thêm sản phẩm mới
 				</div>
 			</div>
-			{tab === "product" && <Products data={productData} />}
-			{tab === "order" && <Orders data={orderData} />}
+			<div>
+				{tab === "product" && <Products data={productData} />}
+				{tab === "order" && <Orders data={orderData} />}
+			</div>
 		</>
 	);
 };

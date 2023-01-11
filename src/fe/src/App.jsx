@@ -17,6 +17,7 @@ import EditProfile from "./Components/Profile/EditProfile";
 import Payment from "./Components/Payment";
 import Category from "./Pages/Category";
 import Store from "./Pages/Store";
+import AddProduct from "./Pages/Store/AddProduct";
 
 const App = () => {
 	return (
@@ -37,6 +38,7 @@ const App = () => {
 				<Route path="cart" element={<Cart />} /> {/*semi-fixed*/}
 				<Route path="payment" element={<Payment />} /> {/*semi-fixed*/}
 				<Route path="support" element={<Support />} /> {/*semi-fixed*/}
+				<Route path="add-product" element={<AddProduct />} />
 			</Route>
 			<Route path="login" element={<Login />} /> {/*semi-fixed*/}
 			<Route path="register" element={<Register />} /> {/*semi-fixed*/}

@@ -1,8 +1,10 @@
 import React, { useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import loginIMG from "../Assets/login.jpg";
 import { login } from "../Services/account";
 
 export default function Login() {
+	const navigate = useNavigate();
 	const emailRef = useRef();
 	const passwordRef = useRef();
 
@@ -58,6 +60,7 @@ export default function Login() {
 									console.log("success");
 									console.log(res);
 									localStorage.setItem("access-token", res.data.access_token);
+									navigate("/");
 								})
 								.catch((err) => {
 									console.log("err");

@@ -1,8 +1,7 @@
-import React, { useState, useRef, useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState, useRef, useEffect } from "react";
 
 import { useNavigate } from "react-router-dom";
-import { getUserQuery, updateUser } from "../../app/slice/userSlice";
+import { getUserInfo, updateUserInfo } from "../../Services/account";
 
 import avatar from "./avatar.png";
 import Template from "./Template";
@@ -16,10 +15,14 @@ const data = [
 ];
 
 export default function EditProfile() {
-	const user = useSelector(getUserQuery);
+	const [user, setUser] = useState({});
+	useEffect(() => {
+		getUserInfo()
+			.then((res) => setUser(res.data))
+			.catch((err) => console.log(err));
+	}, []);
 
 	const navigate = useNavigate();
-	const dispatch = useDispatch();
 
 	const fullnameRef = useRef();
 	const emailRef = useRef();
@@ -49,8 +52,11 @@ export default function EditProfile() {
 							data["image"] = imageRef.current.value;
 						}
 						console.log({ ...user, ...data });
-						dispatch(updateUser({ ...user, ...data }));
-						navigate("/profile");
+						updateUserInfo(data)
+							.then((res) => {
+								navigate("/profile");
+							})
+							.catch((err) => console.log(err));
 					}}>
 					<div className="grid grid-cols-[1.5fr_3fr] mb-5">
 						<div className="flex flex-col gap-4">
@@ -211,6 +217,7 @@ export default function EditProfile() {
 					<div className="flex flex-col gap-2">
 						<div>Copy Link ảnh vào đây để thay đổi ảnh đại diện: </div>
 						<input
+							defaultValue={image}
 							className="w-full rounded-md h-8 p-2"
 							ref={imageRef}
 							onChange={(e) => {

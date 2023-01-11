@@ -119,6 +119,7 @@ export default function Header() {
 								<div
 									className="cursor-pointer hover:bg-slate-400 px-2 py-1"
 									onClick={() => {
+										localStorage.removeItem("access-token");
 										navigate("/login");
 									}}>
 									Đăng xuất

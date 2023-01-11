@@ -1,7 +1,9 @@
-import React, { useMemo } from "react";
+import React, { useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getUserQuery } from "../../app/slice/userSlice";
+import { getUserInfo } from "../../Services/account";
 
 import avatar from "./avatar.png";
 import Template from "./Template";
@@ -24,9 +26,13 @@ const dateDiff = (start, end) => {
 };
 
 export default function Profile() {
-	const user = useSelector(getUserQuery);
 	const navigate = useNavigate();
-	// console.log(user);
+	const [user, setUser] = useState({});
+	useEffect(() => {
+		getUserInfo()
+			.then((res) => setUser(res.data))
+			.catch((err) => console.log(err));
+	}, []);
 
 	return (
 		<div>
