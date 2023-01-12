@@ -211,7 +211,7 @@ export default function EditProfile() {
 					</button>
 				</form>
 				<div className="p-5 flex flex-col justify-center items-center gap-y-2">
-					<div className="w-48 aspect-square p-2 bg-slate-400 rounded-full flex items-center justify-center">
+					<div className="w-48 aspect-square p-2 bg-slate-400 rounded-full flex items-center justify-center overflow-hidden">
 						<img className="w-full" src={image} alt="cannot load image" />
 					</div>
 					<div className="flex flex-col gap-2">

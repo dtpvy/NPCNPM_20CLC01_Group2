@@ -20,8 +20,8 @@ const Template = ({ children }) => {
 			<div className="flex flex-col gap-10">
 				<div className="grid grid-cols-3">
 					<div className="bg-white p-5 mr-5">
-						<div className="font-bold text-2xl">Cái Minh Chánh</div>
-						<div className="text-slate-400">Sửa hồ sơ</div>
+						<div className="font-bold text-2xl">Tuỳ chọn</div>
+						<div className="text-slate-400">Nhấp vào 1 trong những lựa chọn dưới đây</div>
 					</div>
 					<div className="bg-white col-span-2 p-5">
 						<div className="font-semibold text-2xl">Hồ sơ của tôi</div>

@@ -18,7 +18,15 @@ export default function Category() {
 
 	console.log(searchProducts);
 	const searchResults = searchProducts.map((thing, index) => {
-		return <ProductBox key={index} id={thing.id} title={thing.name} price={thing.price} />;
+		return (
+			<ProductBox
+				key={index}
+				id={thing.id}
+				title={thing.name}
+				price={thing.price}
+				image={thing.image}
+			/>
+		);
 	});
 	return (
 		<div className="flex flex-col gap-14">

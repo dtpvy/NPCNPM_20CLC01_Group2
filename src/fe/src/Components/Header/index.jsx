@@ -1,25 +1,46 @@
 import React, { useState, useEffect, useMemo } from "react";
+import "./header.css";
+import avatar from "./avatar.png";
+import loginIMG from "../../Assets/login.jpg";
+
 import { useNavigate } from "react-router-dom";
 import { getCategory } from "../../Services/category";
-import avatar from "./avatar.png";
-import "./header.css";
-import { getAllProduct } from "../../Services/product";
+import { getProductSearch } from "../../Services/product";
+import { getUserInfo } from "../../Services/account";
 
 export default function Header() {
 	const navigate = useNavigate();
-	const [products, setProducts] = useState(getAllProduct());
+	const [user, setUser] = useState({ image: avatar, fullname: "" });
+	const [products, setProducts] = useState([]);
 	const [categories, setCategories] = useState([]);
 
 	const [searchField, setSearchField] = useState("");
 	const [productsFound, setProductsFound] = useState([]);
 	const [catsFound, setCatsFound] = useState([]);
 
-	// useEffect(() => {
-	// 	getCategory().then((res) => {
-	// 		console.log(res);
-	// 		setCategories(res.data);
-	// 	});
-	// }, []);
+	useEffect(() => {
+		getUserInfo()
+			.then((res) => {
+				setUser(res.data);
+			})
+			.catch((err) => console.log(err));
+
+		getCategory()
+			.then((res) => {
+				let prodData = [];
+				setCategories(res.data);
+				res.data.map((item) => {
+					getProductSearch(item.id)
+						.then((res) => {
+							// console.log(res);
+							setProducts((prev) => [...prev, ...res.data]);
+						})
+						.catch((err) => console.log(err));
+				});
+			})
+			.catch((err) => console.log(err));
+	}, []);
+
 	const onSearchFieldChange = (event) => {
 		setSearchField(event.target.value);
 		setCatsFound(
@@ -31,17 +52,17 @@ export default function Header() {
 	};
 
 	const found1 = categories
-		.filter((item) => item.name.toLowerCase().includes(searchField.toLowerCase()))
+		.filter((item) => item.title.toLowerCase().includes(searchField.toLowerCase()))
 		.map((item, i) => {
 			if (searchField != "") {
 				return (
 					<li
-						key={i}
+						key={`${i} - cat`}
 						className="bg-amber-100	px-3 py-2 hover:bg-amber-300 cursor-pointer"
 						onClick={() => {
 							navigate(`/category`); //sửa thêm id
 						}}>
-						{item.name} - danh mục
+						{item.title} - danh mục
 					</li>
 				);
 			}
@@ -53,7 +74,7 @@ export default function Header() {
 			if (searchField != "") {
 				return (
 					<li
-						key={i * 5}
+						key={`${i} - prod`}
 						className="bg-cyan-100 px-3 py-2 cursor-pointer hover:bg-cyan-300"
 						onClick={() => {
 							navigate(`/detail/${item.id}`);
@@ -74,12 +95,13 @@ export default function Header() {
 	return (
 		<header className="bg-sky-600 flex items-center justify-center h-24">
 			<div
-				className="text-white p-3 bg-red-300 cursor-pointer"
+				className="text-white bg-red-300 cursor-pointer rounded-md flex flex-col items-center font-bold hover:scale-105 duration-300 w-16 overflow-hidden"
 				onClick={() => {
 					navigate("/");
 				}}>
-				<span>Webanhang</span>
-				<p>Logo</p>
+				{/* <span>Webanhang</span>
+				<p>Logo</p> */}
+				<img className="object-contain w-full h-full" src={loginIMG} alt="" />
 			</div>
 			<div className="w-5/12 md:w-7/12 mx-20 flex flex-col justify-start ">
 				<div className="flex items-center h-9 mb-1 relative">
@@ -99,11 +121,11 @@ export default function Header() {
 			</div>
 			<div className="flex gap-4 items-center">
 				<div className="flex gap-2 items-center">
-					<div className="bg-white flex justify-center items-center rounded-full">
-						<img src={avatar} alt="" className="h-10 block" />
+					<div className="bg-white w-14 aspect-square flex justify-center items-center rounded-full overflow-hidden">
+						<img src={user.image} alt="" className="h-10 block" />
 					</div>
 					<div className="flex flex-col">
-						<p className="">User name</p>
+						<p className="font-bold">{user.fullname}</p>
 						<div className="dropdown">
 							<button className="dropbtn">
 								Tùy chọn <i className="fa fa-caret-down"></i>

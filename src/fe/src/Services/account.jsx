@@ -46,3 +46,17 @@ export const updateUserInfo = (data) => {
 			.catch((err) => reject(err));
 	});
 };
+
+export const refreshToken = () => {
+	return new Promise((resolve, reject) => {
+		request({
+			method: "post",
+			path: "auth/refresh_token",
+			data: {
+				"access-token": localStorage.getItem("access-token"),
+			},
+		})
+			.then((res) => resolve(res))
+			.catch((err) => reject(err));
+	});
+};

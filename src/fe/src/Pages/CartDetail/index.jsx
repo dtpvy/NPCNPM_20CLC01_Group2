@@ -1,7 +1,6 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-// import product_1 from "../../components/Images/product-1.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
@@ -14,8 +13,8 @@ const ProductRow = ({ item }) => {
 		visible && (
 			<>
 				<div className="col-span-3 flex gap-4 items-center">
-					<div className="">
-						<img className="w-24 aspect-square" src={data.image} alt={"cannot load image"} />
+					<div className="w-24 aspect-square bg-red-300 overflow-hidden rounded-md flex items-center justify-center">
+						<img className="w-full" src={data.image} alt={"cannot load image"} />
 					</div>
 					<div className="">
 						<div className="font-bold text-sm">{data.name}</div>
@@ -85,7 +84,11 @@ const Order = () => {
 						</div>
 
 						<div>
-							<div className="flex font-semibold text-indigo-600 text-sm mt-10 items-center hover:font-bold">
+							<div
+								className="flex font-semibold text-indigo-600 text-sm mt-10 items-center hover:font-bold cursor-pointer hover:scale-105 duration-150"
+								onClick={() => {
+									navigate("/");
+								}}>
 								<FontAwesomeIcon icon={faArrowLeft}></FontAwesomeIcon> Tiếp tục mua hàng
 							</div>
 						</div>

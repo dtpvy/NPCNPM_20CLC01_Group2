@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { getCategory } from "../../Services/category";
 import { createProduct } from "../../Services/product";
 
 const AddProduct = () => {
+	const navigate = useNavigate();
 	const [categories, setCategories] = useState([]);
 	const nameRef = useRef();
 	const quantityRef = useRef();
@@ -64,7 +66,10 @@ const AddProduct = () => {
 						image: imageRef.current.value,
 					};
 					createProduct(data)
-						.then((res) => console.log("success"))
+						.then((res) => {
+							console.log("success");
+							navigate("/store");
+						})
 						.catch((err) => console.log(err));
 				}}>
 				Tạo sản phẩm

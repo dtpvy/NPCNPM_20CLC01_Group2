@@ -60,12 +60,10 @@ export const getProductSearch = (category_id) => {
 			params: { sort: "asc", st: "name", page: 0, limit: 1000, category: category_id },
 		})
 			.then((res) => {
-				console.log("success");
 				resolve(res);
 			})
-			.catch(() => {
-				console.log("error");
-				resolve({ status: "DEFAULT", data: [] });
+			.catch((err) => {
+				reject(err);
 			});
 	});
 };

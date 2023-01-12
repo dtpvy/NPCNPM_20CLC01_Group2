@@ -26,8 +26,8 @@ const ProductDetail = () => {
 
 	return (
 		<div className="grid grid-cols-[1fr_2fr] gap-x-3">
-			<div className="bg-slate-200 p-1">
-				<img src={""} alt="cannot load" className="w-full h-full object-contain" />
+			<div className="bg-red-200 overflow-hidden">
+				<img src={data.image} alt="cannot load" className="w-full h-full object-contain" />
 			</div>
 			<div className="bg-white p-5 shadow-lg rounded-sm grid grid-cols-2 divide-x-2">
 				<div className="flex flex-col justify-between h-full w-full pr-5">
@@ -89,7 +89,7 @@ const ProductDetail = () => {
 				<div className="w-full pl-5 flex flex-col divide-y-2 gap-y-4">
 					<div>
 						<div className="flex items-center">
-							<div className="aspect-square h-16">
+							<div className="aspect-square h-16 bg-red-200 rounded-md">
 								<img src={""} alt="cannot load" className="w-full h-full object-fill" />
 							</div>
 							<h2 className="mx-2 text-3xl font-bold">Unilever</h2>

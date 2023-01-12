@@ -7,13 +7,32 @@ export default function Suggestion() {
 	const [suggestions, setSuggestion] = useState([]);
 	useEffect(() => {
 		getProductSearch("e8e05e61-9244-4057-b5c9-6c9834364979").then((res) => {
-			console.log(res);
 			setSuggestion(res.data.splice(0, 8));
 		});
 	}, []);
 
+	// useEffect(() => {
+	// 	getCategory()
+	// 		.then((res) => {
+	// 			res.data.map((item) => {
+	// 				getProductSearch(item.id).then((r) => {
+	// 					setSuggestion((prev) => [...prev, ...r.data.splice(0, 8)]);
+	// 				});
+	// 			});
+	// 		})
+	// 		.catch((err) => console.log(err));
+	// }, []);
+
 	const Suggestions = suggestions.map((thing, index) => {
-		return <ProductBox key={index} id={thing.id} title={thing.name} price={thing.price} />;
+		return (
+			<ProductBox
+				key={index}
+				id={thing.id}
+				title={thing.name}
+				price={thing.price}
+				image={thing.image}
+			/>
+		);
 	});
 
 	return (

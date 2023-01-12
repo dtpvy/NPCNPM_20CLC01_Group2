@@ -65,6 +65,9 @@ export default function Login() {
 								.catch((err) => {
 									console.log("err");
 									console.log(err);
+									if (err.errors.message === "Account is invalid") {
+										alert("Tên đăng nhập hoặc mật khẩu không đúng");
+									}
 								});
 						}}>
 						Đăng nhập
