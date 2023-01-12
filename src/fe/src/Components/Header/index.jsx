@@ -60,7 +60,8 @@ export default function Header() {
 						key={`${i} - cat`}
 						className="bg-amber-100	px-3 py-2 hover:bg-amber-300 cursor-pointer"
 						onClick={() => {
-							navigate(`/category`); //sửa thêm id
+							setSearchField("");
+							navigate(`/category/${item.id}`); //sửa thêm id
 						}}>
 						{item.title} - danh mục
 					</li>
@@ -77,6 +78,7 @@ export default function Header() {
 						key={`${i} - prod`}
 						className="bg-cyan-100 px-3 py-2 cursor-pointer hover:bg-cyan-300"
 						onClick={() => {
+							setSearchField("");
 							navigate(`/detail/${item.id}`);
 						}}>
 						{item.name} - sản phẩm
@@ -114,7 +116,7 @@ export default function Header() {
 						id="search-bar"
 					/>
 
-					<ul className="absolute top-9 left-1/12 bg-white w-9/12 rounded-b-md overflow-hidden">
+					<ul className="absolute top-9 z-50 left-1/12 bg-white w-9/12 rounded-b-md overflow-hidden">
 						{found}
 					</ul>
 				</div>
