@@ -1,9 +1,11 @@
 import React from "react";
 import { useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import loginIMG from "../Assets/login.jpg";
 import { register } from "../Services/account";
 
 export default function Register() {
+	const navigate = useNavigate();
 	const emailRef = useRef();
 	const passwordRef = useRef();
 	const repeatPasswordRef = useRef();
@@ -54,8 +56,15 @@ export default function Register() {
 								})
 									.then((res) => {
 										console.log(res);
+										alert("Đăng ký tài khoản thành công");
+										navigate("/login");
 									})
-									.catch((err) => console.log(err));
+									.catch((err) => {
+										console.log(err);
+										if (err.errors.message === "Email already exists") {
+											alert("Email đã tồn tại");
+										}
+									});
 							}
 						}}>
 						Đăng Ký

@@ -42,7 +42,7 @@ export default function Login() {
 						<p>Quên mật khẩu? </p>
 					</div>
 					<div className=" flex justify-between  text-gray-400 py-2">
-						<a className="italic" href="/register/">
+						<a className="italic" href="/register">
 							Chưa có tài khoản?{" "}
 						</a>
 					</div>
